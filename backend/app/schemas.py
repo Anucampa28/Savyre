@@ -15,6 +15,7 @@ class UserCreate(UserBase):
 
 class UserRead(UserBase):
     id: int
+    is_verified: bool
     created_at: datetime
 
     class Config:

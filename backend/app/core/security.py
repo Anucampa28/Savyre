@@ -3,6 +3,8 @@ from typing import Optional
 
 from jose import jwt
 from passlib.context import CryptContext
+import hashlib
+import requests
 
 from .config import settings
 
@@ -27,5 +29,23 @@ def create_access_token(subject: str, expires_delta_minutes: Optional[int] = Non
 
 def decode_access_token(token: str) -> dict:
     return jwt.decode(token, settings.secret_key, algorithms=[settings.algorithm])
+
+
+def is_password_pwned(password: str) -> bool:
+    # k-Anonymity check with HIBP
+    sha1 = hashlib.sha1(password.encode('utf-8')).hexdigest().upper()
+    prefix, suffix = sha1[:5], sha1[5:]
+    try:
+        res = requests.get(f"https://api.pwnedpasswords.com/range/{prefix}", timeout=5)
+        if res.status_code != 200:
+            return False
+        for line in res.text.splitlines():
+            hash_suffix, count = line.split(":")
+            if hash_suffix == suffix:
+                return True
+        return False
+    except Exception:
+        # If HIBP unreachable, do not block
+        return False
 
 

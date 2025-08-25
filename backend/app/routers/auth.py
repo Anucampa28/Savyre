@@ -5,17 +5,33 @@ from jose import JWTError
 from ..db import get_db
 from ..models.user import User
 from ..schemas import UserCreate, UserRead, LoginRequest, Token
-from ..core.security import get_password_hash, verify_password, create_access_token, decode_access_token
+from ..core.security import (
+    get_password_hash,
+    verify_password,
+    create_access_token,
+    decode_access_token,
+    is_password_pwned,
+)
+from fastapi import BackgroundTasks
+import secrets
+from datetime import datetime, timedelta
+from sqlalchemy import String
+from sqlalchemy.orm import mapped_column
 
 
 router = APIRouter()
 
+# Simple in-memory verification token store for demo (use DB/Redis in prod)
+verification_tokens: dict[str, dict] = {}
+
 
 @router.post("/signup", response_model=UserRead)
-def signup(payload: UserCreate, db: Session = Depends(get_db)):
+def signup(payload: UserCreate, background: BackgroundTasks, db: Session = Depends(get_db)):
     existing = db.query(User).filter(User.email == payload.email).first()
     if existing:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
+    if is_password_pwned(payload.password):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Password found in data breach. Please use a stronger password.")
 
     user = User(
         email=payload.email,
@@ -26,6 +42,13 @@ def signup(payload: UserCreate, db: Session = Depends(get_db)):
     db.add(user)
     db.commit()
     db.refresh(user)
+
+    # create verify token and simulate email send
+    token = secrets.token_urlsafe(32)
+    verification_tokens[token] = {"user_id": user.id, "exp": datetime.utcnow() + timedelta(hours=12)}
+    # In a real app, send email. For now, log to server output.
+    print(f"[VERIFY_LINK] http://localhost:8001/api/auth/verify?token={token}")
+
     return user
 
 
@@ -34,6 +57,8 @@ def login(payload: LoginRequest, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == payload.email).first()
     if not user or not verify_password(payload.password, user.hashed_password):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
+    if not user.is_verified:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Email not verified")
     token = create_access_token(str(user.id))
     return Token(access_token=token)
 
@@ -51,5 +76,22 @@ def me(authorization: str | None = None, db: Session = Depends(get_db)):
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
     return user
+
+
+@router.get("/verify")
+def verify_account(token: str, db: Session = Depends(get_db)):
+    data = verification_tokens.get(token)
+    if not data:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid token")
+    if data["exp"] < datetime.utcnow():
+        verification_tokens.pop(token, None)
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Token expired")
+    user = db.get(User, data["user_id"])
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    user.is_verified = True
+    db.commit()
+    verification_tokens.pop(token, None)
+    return {"detail": "Account verified successfully"}
 
 
