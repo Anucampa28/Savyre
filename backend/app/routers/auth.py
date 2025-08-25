@@ -17,6 +17,8 @@ import secrets
 from datetime import datetime, timedelta
 from sqlalchemy import String
 from sqlalchemy.orm import mapped_column
+import os
+from ..services.email import send_verification_email
 
 
 router = APIRouter()
@@ -43,11 +45,13 @@ def signup(payload: UserCreate, background: BackgroundTasks, db: Session = Depen
     db.commit()
     db.refresh(user)
 
-    # create verify token and simulate email send
+    # create verify token and send email
     token = secrets.token_urlsafe(32)
     verification_tokens[token] = {"user_id": user.id, "exp": datetime.utcnow() + timedelta(hours=12)}
-    # In a real app, send email. For now, log to server output.
-    print(f"[VERIFY_LINK] http://localhost:8001/api/auth/verify?token={token}")
+    app_base = os.getenv('APP_BASE_URL', 'http://localhost:8001')
+    verify_link = f"{app_base}/api/auth/verify?token={token}"
+    background.add_task(send_verification_email, user.email, verify_link)
+    print(f"[VERIFY_LINK] {verify_link}")
 
     return user
 
@@ -93,5 +97,20 @@ def verify_account(token: str, db: Session = Depends(get_db)):
     db.commit()
     verification_tokens.pop(token, None)
     return {"detail": "Account verified successfully"}
+
+
+@router.post("/resend-verification")
+def resend_verification(email: str, background: BackgroundTasks, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.email == email).first()
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    if user.is_verified:
+        return {"detail": "Account already verified"}
+    token = secrets.token_urlsafe(32)
+    verification_tokens[token] = {"user_id": user.id, "exp": datetime.utcnow() + timedelta(hours=12)}
+    app_base = os.getenv('APP_BASE_URL', 'http://localhost:8001')
+    verify_link = f"{app_base}/api/auth/verify?token={token}"
+    background.add_task(send_verification_email, user.email, verify_link)
+    return {"detail": "Verification email sent"}
 
 
