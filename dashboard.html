@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Laksham Assessment Portal</title>
+    <meta name="description" content="Manage assessments, track candidates, and view analytics on the Laksham dashboard.">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>Laksham</h2>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#dashboard" class="nav-link active">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#assessments" class="nav-link">Assessments</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#candidates" class="nav-link">Candidates</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#analytics" class="nav-link">Analytics</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#settings" class="nav-link">Settings</a>
+                </li>
+            </ul>
+            <div class="nav-buttons">
+                <div class="user-menu">
+                    <button class="user-button" onclick="toggleUserMenu()">
+                        <div class="user-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <span class="user-name" id="userName">Demo User</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="user-dropdown" id="userDropdown">
+                        <a href="#profile"><i class="fas fa-user-circle"></i> Profile</a>
+                        <a href="#company"><i class="fas fa-building"></i> Company</a>
+                        <a href="#billing"><i class="fas fa-credit-card"></i> Billing</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Sign Out</a>
+                    </div>
+                </div>
+            </div>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h3>Quick Actions</h3>
+            </div>
+            <div class="sidebar-actions">
+                <button class="action-btn primary" onclick="createAssessment()">
+                    <i class="fas fa-plus"></i>
+                    New Assessment
+                </button>
+                <button class="action-btn" onclick="inviteCandidates()">
+                    <i class="fas fa-user-plus"></i>
+                    Invite Candidates
+                </button>
+                <button class="action-btn" onclick="viewReports()">
+                    <i class="fas fa-chart-bar"></i>
+                    View Reports
+                </button>
+                <button class="action-btn" onclick="exportData()">
+                    <i class="fas fa-download"></i>
+                    Export Data
+                </button>
+            </div>
+            
+            <div class="sidebar-section">
+                <h4>Recent Assessments</h4>
+                <div class="recent-list">
+                    <div class="recent-item">
+                        <div class="recent-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="recent-info">
+                            <span class="recent-title">Leadership Skills</span>
+                            <span class="recent-status completed">Completed</span>
+                        </div>
+                    </div>
+                    <div class="recent-item">
+                        <div class="recent-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <div class="recent-info">
+                            <span class="recent-title">Technical Assessment</span>
+                            <span class="recent-status pending">Pending</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Dashboard Header -->
+            <div class="dashboard-header">
+                <div class="header-content">
+                    <h1>Welcome back, <span id="welcomeName">Demo</span>!</h1>
+                    <p>Here's what's happening with your assessments today</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-primary" onclick="createAssessment()">
+                        <i class="fas fa-plus"></i>
+                        Create Assessment
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Overview -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon passed">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-number" id="passedCount">0</h3>
+                        <p class="stat-label">Candidates Passed</p>
+                        <span class="stat-change positive">+12% from last week</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon rejected">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-number" id="rejectedCount">0</h3>
+                        <p class="stat-label">Candidates Rejected</p>
+                        <span class="stat-change negative">-5% from last week</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon pending">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-number" id="pendingCount">0</h3>
+                        <p class="stat-label">Pending Reviews</p>
+                        <span class="stat-change neutral">No change</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon total">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-number" id="totalCount">0</h3>
+                        <p class="stat-label">Total Candidates</p>
+                        <span class="stat-change positive">+8% from last week</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Assessment Status Legend -->
+            <div class="status-legend">
+                <div class="legend-item">
+                    <span class="legend-dot invited"></span>
+                    <span>Invited</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot opened"></span>
+                    <span>Opened</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot started"></span>
+                    <span>Started</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-dot completed"></span>
+                    <span>Completed</span>
+                </div>
+            </div>
+
+            <!-- Analytics Section -->
+            <div class="analytics-section">
+                <div class="section-header">
+                    <h2>Performance Analytics</h2>
+                    <p>Key metrics and insights for your assessments</p>
+                </div>
+                
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <div class="analytics-header">
+                            <h4>Open Rate</h4>
+                            <i class="fas fa-info-circle" title="Percentage of candidates who opened the assessment email"></i>
+                        </div>
+                        <div class="analytics-value" id="openRate">0%</div>
+                        <div class="analytics-trend positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+15% from last month</span>
+                        </div>
+                    </div>
+                    
+                    <div class="analytics-card">
+                        <div class="analytics-header">
+                            <h4>Completion Rate</h4>
+                            <i class="fas fa-info-circle" title="Percentage of candidates who completed the assessment"></i>
+                        </div>
+                        <div class="analytics-value" id="completionRate">0%</div>
+                        <div class="analytics-trend positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+8% from last month</span>
+                        </div>
+                    </div>
+                    
+                    <div class="analytics-card">
+                        <div class="analytics-header">
+                            <h4>Average Completion Time</h4>
+                            <i class="fas fa-info-circle" title="Average time taken by candidates to complete assessments"></i>
+                        </div>
+                        <div class="analytics-value" id="avgCompletionTime">0 days</div>
+                        <div class="analytics-trend negative">
+                            <i class="fas fa-arrow-down"></i>
+                            <span>-2 days from last month</span>
+                        </div>
+                    </div>
+                    
+                    <div class="analytics-card">
+                        <div class="analytics-header">
+                            <h4>Decision Time</h4>
+                            <i class="fas fa-info-circle" title="Average time to make hiring decisions after assessment completion"></i>
+                        </div>
+                        <div class="analytics-value" id="avgDecisionTime">0 days</div>
+                        <div class="analytics-trend positive">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>+1 day from last month</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts-section">
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h4>Candidates by Day of Week</h4>
+                            <div class="chart-actions">
+                                <button class="chart-btn active" data-period="week">Week</button>
+                                <button class="chart-btn" data-period="month">Month</button>
+                            </div>
+                        </div>
+                        <div class="chart-content">
+                            <div class="chart-placeholder">
+                                <i class="fas fa-chart-line"></i>
+                                <p>Assessment activity data will appear here</p>
+                                <span>Start inviting candidates to see trends</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h4>Candidates by Time of Day</h4>
+                            <div class="chart-actions">
+                                <button class="chart-btn active" data-period="day">Day</button>
+                                <button class="chart-btn" data-period="week">Week</button>
+                            </div>
+                        </div>
+                        <div class="chart-content">
+                            <div class="chart-placeholder">
+                                <i class="fas fa-clock"></i>
+                                <p>Time-based activity data will appear here</p>
+                                <span>Track when candidates are most active</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="activity-section">
+                <div class="section-header">
+                    <h2>Recent Activity</h2>
+                    <a href="#activity" class="view-all">View All</a>
+                </div>
+                
+                <div class="activity-list">
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <div class="activity-content">
+                            <p><strong>Sarah Johnson</strong> completed the Leadership Assessment</p>
+                            <span class="activity-time">2 hours ago</span>
+                        </div>
+                        <div class="activity-status passed">Passed</div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-envelope-open"></i>
+                        </div>
+                        <div class="activity-content">
+                            <p><strong>Mike Chen</strong> opened the Technical Assessment email</p>
+                            <span class="activity-time">4 hours ago</span>
+                        </div>
+                        <div class="activity-status opened">Opened</div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <div class="activity-content">
+                            <p><strong>Emily Rodriguez</strong> was invited to the Soft Skills Assessment</p>
+                            <span class="activity-time">1 day ago</span>
+                        </div>
+                        <div class="activity-status invited">Invited</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Chat Widget -->
+    <div class="chat-widget" id="chatWidget">
+        <div class="chat-header" onclick="toggleChat()">
+            <div class="chat-avatar">
+                <i class="fas fa-headset"></i>
+            </div>
+            <div class="chat-info">
+                <span class="chat-name">Laksham Support</span>
+                <span class="chat-status">Online</span>
+            </div>
+            <div class="chat-toggle">
+                <i class="fas fa-chevron-up"></i>
+            </div>
+        </div>
+        
+        <div class="chat-body" id="chatBody">
+            <div class="chat-message support">
+                <div class="message-content">
+                    <p>Welcome to Laksham! I'm here to help you with any questions about assessments, candidates, or platform features. How can I assist you today?</p>
+                </div>
+                <span class="message-time">Just now</span>
+            </div>
+        </div>
+        
+        <div class="chat-input">
+            <input type="text" placeholder="Type your message..." id="chatInput">
+            <button onclick="sendMessage()">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notificationContainer"></div>
+
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

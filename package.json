@@ -1,0 +1,41 @@
+{
+  "name": "laksham-assessment-portal",
+  "version": "1.0.0",
+  "description": "A modern assessment portal website for real-life on-job simulated question library",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "dev": "python -m http.server 8000",
+    "serve": "python -m http.server 8000"
+  },
+  "keywords": [
+    "assessment",
+    "portal",
+    "workplace",
+    "simulation",
+    "skills",
+    "professional",
+    "training",
+    "evaluation"
+  ],
+  "author": "Laksham Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/laksham/assessment-portal.git"
+  },
+  "bugs": {
+    "url": "https://github.com/laksham/assessment-portal/issues"
+  },
+  "homepage": "https://laksham.com",
+  "devDependencies": {},
+  "dependencies": {},
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}

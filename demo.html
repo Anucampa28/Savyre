@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assessment Demo - Laksham</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .demo-container {
+            max-width: 800px;
+            margin: 120px auto 40px;
+            padding: 0 20px;
+        }
+        
+        .demo-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .demo-header h1 {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+        
+        .scenario-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .scenario-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+        
+        .scenario-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.25rem;
+        }
+        
+        .scenario-info h3 {
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+        
+        .scenario-info p {
+            color: var(--text-secondary);
+            margin: 0;
+        }
+        
+        .scenario-content {
+            margin-bottom: 2rem;
+        }
+        
+        .scenario-content h4 {
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+        
+        .scenario-content p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .options-grid {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .option-item {
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .option-item:hover {
+            border-color: var(--primary-color);
+            background: var(--bg-secondary);
+        }
+        
+        .option-item.selected {
+            border-color: var(--primary-color);
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .option-item.selected p {
+            color: white;
+        }
+        
+        .option-item input[type="radio"] {
+            margin-right: 0.75rem;
+        }
+        
+        .feedback-section {
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            display: none;
+        }
+        
+        .feedback-section.show {
+            display: block;
+            animation: fadeInUp 0.5s ease;
+        }
+        
+        .feedback-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        
+        .feedback-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.875rem;
+        }
+        
+        .feedback-icon.correct {
+            background: var(--secondary-color);
+        }
+        
+        .feedback-icon.incorrect {
+            background: #ef4444;
+        }
+        
+        .feedback-content h5 {
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+        
+        .feedback-content p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        
+        .feedback-tips {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            border-left: 4px solid var(--accent-color);
+        }
+        
+        .feedback-tips h6 {
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .feedback-tips ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feedback-tips li {
+            padding: 0.25rem 0;
+            color: var(--text-secondary);
+            position: relative;
+            padding-left: 1.25rem;
+        }
+        
+        .feedback-tips li::before {
+            content: '💡';
+            position: absolute;
+            left: 0;
+        }
+        
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+        
+        .progress-bar {
+            background: var(--border-color);
+            border-radius: 10px;
+            height: 8px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: var(--gradient-primary);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .back-to-home {
+            text-align: center;
+            margin-top: 3rem;
+        }
+        
+        .back-to-home a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .back-to-home a:hover {
+            text-decoration: underline;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>Laksham</h2>
+            </div>
+            <div class="nav-buttons">
+                <a href="index.html" class="btn btn-outline">Back to Home</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="demo-container">
+        <div class="demo-header">
+            <h1>Assessment Demo</h1>
+            <p>Experience a real-life workplace scenario assessment</p>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <!-- Scenario Container -->
+        <div class="scenario-container" id="scenarioContainer">
+            <div class="scenario-header">
+                <div class="scenario-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="scenario-info">
+                    <h3>Team Leadership Challenge</h3>
+                    <p>Difficulty: Advanced | Time: 5 minutes</p>
+                </div>
+            </div>
+
+            <div class="scenario-content">
+                <h4>Scenario</h4>
+                <p>You're a newly promoted team lead managing a group of 8 developers. Your team has been working on a critical project with a tight deadline. Two team members are consistently missing deadlines and causing delays. The project manager is putting pressure on you to deliver on time.</p>
+                <p><strong>Question:</strong> How would you handle this situation to ensure project success while maintaining team morale?</p>
+            </div>
+
+            <div class="options-grid">
+                <label class="option-item" for="option1">
+                    <input type="radio" name="scenario" id="option1" value="1">
+                    <strong>Option A:</strong> Immediately escalate the issue to senior management and request disciplinary action against the underperforming team members.
+                </label>
+                
+                <label class="option-item" for="option2">
+                    <input type="radio" name="scenario" id="option2" value="2">
+                    <strong>Option B:</strong> Schedule one-on-one meetings with the struggling team members to understand their challenges and provide support and resources.
+                </label>
+                
+                <label class="option-item" for="option3">
+                    <input type="radio" name="scenario" id="option3" value="3">
+                    <strong>Option C:</strong> Reassign the critical tasks to more reliable team members and isolate the underperforming members from important work.
+                </label>
+                
+                <label class="option-item" for="option4">
+                    <input type="radio" name="scenario" id="option4" value="4">
+                    <strong>Option D:</strong> Organize a team meeting to discuss the challenges openly, create a support plan, and redistribute workload based on individual strengths.
+                </label>
+            </div>
+
+            <div class="navigation-buttons">
+                <button class="btn btn-secondary" onclick="previousScenario()" id="prevBtn" disabled>Previous</button>
+                <button class="btn btn-primary" onclick="nextScenario()" id="nextBtn">Next</button>
+            </div>
+        </div>
+
+        <!-- Feedback Section -->
+        <div class="feedback-section" id="feedbackSection">
+            <div class="feedback-header">
+                <div class="feedback-icon correct" id="feedbackIcon">
+                    <i class="fas fa-check"></i>
+                </div>
+                <h5 id="feedbackTitle">Great Job!</h5>
+            </div>
+            <div class="feedback-content">
+                <p id="feedbackText">Your approach demonstrates strong leadership skills and emotional intelligence.</p>
+                <div class="feedback-tips">
+                    <h6>Key Leadership Principles Demonstrated:</h6>
+                    <ul>
+                        <li>Empathetic communication and active listening</li>
+                        <li>Problem-solving through collaboration</li>
+                        <li>Team development and support</li>
+                        <li>Balancing accountability with support</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="back-to-home">
+            <a href="index.html">
+                <i class="fas fa-arrow-left"></i>
+                Return to Homepage
+            </a>
+        </div>
+    </div>
+
+    <script>
+        let currentScenario = 0;
+        const scenarios = [
+            {
+                title: "Team Leadership Challenge",
+                difficulty: "Advanced",
+                time: "5 minutes",
+                icon: "fas fa-users",
+                scenario: "You're a newly promoted team lead managing a group of 8 developers. Your team has been working on a critical project with a tight deadline. Two team members are consistently missing deadlines and causing delays. The project manager is putting pressure on you to deliver on time.",
+                question: "How would you handle this situation to ensure project success while maintaining team morale?",
+                options: [
+                    {
+                        text: "Immediately escalate the issue to senior management and request disciplinary action against the underperforming team members.",
+                        correct: false,
+                        feedback: "While accountability is important, immediately escalating without understanding the root cause can damage team trust and morale."
+                    },
+                    {
+                        text: "Schedule one-on-one meetings with the struggling team members to understand their challenges and provide support and resources.",
+                        correct: true,
+                        feedback: "Excellent approach! This demonstrates empathy, leadership, and problem-solving skills. Understanding individual challenges helps create targeted solutions."
+                    },
+                    {
+                        text: "Reassign the critical tasks to more reliable team members and isolate the underperforming members from important work.",
+                        correct: false,
+                        feedback: "This approach may solve the immediate problem but can create resentment and doesn't address the underlying issues."
+                    },
+                    {
+                        text: "Organize a team meeting to discuss the challenges openly, create a support plan, and redistribute workload based on individual strengths.",
+                        correct: true,
+                        feedback: "Great collaborative approach! This fosters team unity and leverages collective strengths to solve problems."
+                    }
+                ]
+            },
+            {
+                title: "Customer Service Crisis",
+                difficulty: "Intermediate",
+                time: "3 minutes",
+                icon: "fas fa-headset",
+                scenario: "A major client has just called, extremely upset about a critical bug in your software that's affecting their business operations. They're threatening to cancel their contract and demand immediate resolution.",
+                question: "How do you handle this high-pressure customer service situation?",
+                options: [
+                    {
+                        text: "Immediately promise to fix the issue within 24 hours to calm them down, regardless of the actual complexity.",
+                        correct: false,
+                        feedback: "Making unrealistic promises can damage credibility and trust when you can't deliver."
+                    },
+                    {
+                        text: "Listen actively, acknowledge their frustration, gather specific details about the issue, and provide a realistic timeline for resolution.",
+                        correct: true,
+                        feedback: "Perfect! This approach shows empathy, professionalism, and realistic problem-solving."
+                    },
+                    {
+                        text: "Transfer them to technical support immediately without addressing their emotional state.",
+                        correct: false,
+                        feedback: "Ignoring the customer's emotional state can escalate the situation and damage the relationship."
+                    },
+                    {
+                        text: "Offer a discount or compensation immediately to appease them before understanding the full scope of the problem.",
+                        correct: false,
+                        feedback: "Premature compensation can set unrealistic expectations and doesn't address the core issue."
+                    }
+                ]
+            },
+            {
+                title: "Technical Decision Making",
+                difficulty: "Expert",
+                time: "7 minutes",
+                icon: "fas fa-laptop-code",
+                scenario: "Your development team is behind schedule on a major project. The client is requesting additional features that weren't in the original scope. Your team suggests cutting corners on testing to meet the deadline.",
+                question: "How do you balance quality, scope, and timeline in this situation?",
+                options: [
+                    {
+                        text: "Agree to cut testing to meet the deadline and add the new features as requested.",
+                        correct: false,
+                        feedback: "Compromising quality can lead to long-term technical debt and customer dissatisfaction."
+                    },
+                    {
+                        text: "Refuse all changes and stick strictly to the original plan and timeline.",
+                        correct: false,
+                        feedback: "Being inflexible can damage client relationships and miss opportunities for improvement."
+                    },
+                    {
+                        text: "Analyze the impact of new features, negotiate realistic timelines, and maintain quality standards through proper planning.",
+                        correct: true,
+                        feedback: "Excellent strategic thinking! This approach balances client needs with quality and realistic expectations."
+                    },
+                    {
+                        text: "Implement the new features quickly without proper planning and hope the testing team can catch up later.",
+                        correct: false,
+                        feedback: "Rushing implementation without planning often leads to more problems and delays."
+                    }
+                ]
+            }
+        ];
+
+        function updateProgress() {
+            const progress = ((currentScenario + 1) / scenarios.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function loadScenario(index) {
+            const scenario = scenarios[index];
+            const container = document.getElementById('scenarioContainer');
+            
+            container.innerHTML = `
+                <div class="scenario-header">
+                    <div class="scenario-icon">
+                        <i class="${scenario.icon}"></i>
+                    </div>
+                    <div class="scenario-info">
+                        <h3>${scenario.title}</h3>
+                        <p>Difficulty: ${scenario.difficulty} | Time: ${scenario.time}</p>
+                    </div>
+                </div>
+
+                <div class="scenario-content">
+                    <h4>Scenario</h4>
+                    <p>${scenario.scenario}</p>
+                    <p><strong>Question:</strong> ${scenario.question}</p>
+                </div>
+
+                <div class="options-grid">
+                    ${scenario.options.map((option, i) => `
+                        <label class="option-item" for="option${i + 1}">
+                            <input type="radio" name="scenario" id="option${i + 1}" value="${i + 1}">
+                            <strong>Option ${String.fromCharCode(65 + i)}:</strong> ${option.text}
+                        </label>
+                    `).join('')}
+                </div>
+
+                <div class="navigation-buttons">
+                    <button class="btn btn-secondary" onclick="previousScenario()" ${index === 0 ? 'disabled' : ''}>Previous</button>
+                    <button class="btn btn-primary" onclick="nextScenario()">${index === scenarios.length - 1 ? 'Finish' : 'Next'}</button>
+                </div>
+            `;
+
+            // Reattach event listeners
+            attachOptionListeners();
+            updateProgress();
+        }
+
+        function attachOptionListeners() {
+            document.querySelectorAll('input[name="scenario"]').forEach((radio, index) => {
+                radio.addEventListener('change', function() {
+                    if (this.checked) {
+                        showFeedback(index);
+                    }
+                });
+            });
+        }
+
+        function showFeedback(optionIndex) {
+            const scenario = scenarios[currentScenario];
+            const option = scenario.options[optionIndex];
+            const feedbackSection = document.getElementById('feedbackSection');
+            const feedbackIcon = document.getElementById('feedbackIcon');
+            const feedbackTitle = document.getElementById('feedbackTitle');
+            const feedbackText = document.getElementById('feedbackText');
+
+            if (option.correct) {
+                feedbackIcon.className = 'feedback-icon correct';
+                feedbackIcon.innerHTML = '<i class="fas fa-check"></i>';
+                feedbackTitle.textContent = 'Excellent Choice!';
+            } else {
+                feedbackIcon.className = 'feedback-icon incorrect';
+                feedbackIcon.innerHTML = '<i class="fas fa-times"></i>';
+                feedbackTitle.textContent = 'Consider This Approach';
+            }
+
+            feedbackText.textContent = option.feedback;
+            feedbackSection.classList.add('show');
+        }
+
+        function nextScenario() {
+            if (currentScenario < scenarios.length - 1) {
+                currentScenario++;
+                loadScenario(currentScenario);
+                document.getElementById('feedbackSection').classList.remove('show');
+            } else {
+                // Show completion message
+                document.getElementById('scenarioContainer').innerHTML = `
+                    <div class="scenario-header">
+                        <div class="scenario-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="scenario-info">
+                            <h3>Assessment Complete!</h3>
+                            <p>Great job completing the demo scenarios</p>
+                        </div>
+                    </div>
+                    <div class="scenario-content">
+                        <h4>What You've Experienced</h4>
+                        <p>You've just completed a sample of Laksham's real-life workplace scenario assessments. These scenarios are designed to evaluate:</p>
+                        <ul style="color: var(--text-secondary); line-height: 1.6;">
+                            <li>Critical thinking and decision-making skills</li>
+                            <li>Leadership and team management abilities</li>
+                            <li>Customer service and communication skills</li>
+                            <li>Technical judgment and problem-solving</li>
+                        </ul>
+                        <p style="margin-top: 1.5rem;">Ready to experience the full assessment library? Start your journey with Laksham today!</p>
+                    </div>
+                    <div style="text-align: center; margin-top: 2rem;">
+                        <a href="index.html" class="btn btn-primary btn-large">Explore Full Platform</a>
+                    </div>
+                `;
+            }
+        }
+
+        function previousScenario() {
+            if (currentScenario > 0) {
+                currentScenario--;
+                loadScenario(currentScenario);
+                document.getElementById('feedbackSection').classList.remove('show');
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadScenario(0);
+        });
+    </script>
+</body>
+</html>
