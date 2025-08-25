@@ -117,37 +117,32 @@ async function handleLogin(event) {
     showLoading();
     
     try {
-        // Simulate API call
-        await simulateApiCall(1500);
-        
-        // Check against demo credentials or registered users
-        const user = await authenticateUser(email, password);
-        
-        if (user) {
-            // Login successful
-            currentUser = user;
-            isAuthenticated = true;
-            
-            // Save user data
-            if (rememberMe) {
-                localStorage.setItem('laksham_user', JSON.stringify(user));
-                localStorage.setItem('laksham_token', 'demo_token_' + Date.now());
-            } else {
-                sessionStorage.setItem('laksham_user', JSON.stringify(user));
-                sessionStorage.setItem('laksham_token', 'demo_token_' + Date.now());
-            }
-            
-            showNotification('Login successful! Redirecting to dashboard...', 'success');
-            
-            // Redirect to dashboard
-            setTimeout(() => {
-                window.location.href = 'dashboard.html';
-            }, 1500);
-            
-        } else {
-            showNotification('Invalid email or password. Please try again.', 'error');
+        const apiBase = window.LAKSHAM_CONFIG?.API_BASE_URL || 'http://localhost:8001/api';
+        const res = await fetch(`${apiBase}/auth/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+        if (!res.ok) {
+            const msg = res.status === 401 ? 'Invalid email or password. Please try again.' : 'Login failed.';
+            showNotification(msg, 'error');
+            return;
         }
-        
+        const data = await res.json();
+        const token = data.access_token;
+
+        // Fetch profile
+        const meRes = await fetch(`${apiBase}/auth/me`, { headers: { Authorization: `Bearer ${token}` } });
+        const user = await meRes.json();
+
+        currentUser = user;
+        isAuthenticated = true;
+        const storage = rememberMe ? localStorage : sessionStorage;
+        storage.setItem('laksham_user', JSON.stringify(user));
+        storage.setItem('laksham_token', token);
+
+        showNotification('Login successful! Redirecting to dashboard...', 'success');
+        setTimeout(() => { window.location.href = 'dashboard.html'; }, 800);
     } catch (error) {
         console.error('Login error:', error);
         showNotification('An error occurred during login. Please try again.', 'error');
@@ -192,32 +187,27 @@ async function handleSignup(event) {
     showLoading();
     
     try {
-        // Simulate API call
-        await simulateApiCall(2000);
-        
-        // Create user account and store locally
-        const user = await createUser({
-            firstName,
-            lastName,
-            email,
-            password,
-            phoneNumber
+        const apiBase = window.LAKSHAM_CONFIG?.API_BASE_URL || 'http://localhost:8001/api';
+        const res = await fetch(`${apiBase}/auth/signup`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                email,
+                password,
+                first_name: firstName,
+                last_name: lastName
+            })
         });
-        
-        if (user) {
-            showNotification('Account created successfully! You can now sign in.', 'success');
-            
-            // Return to login form after successful signup
-            setTimeout(() => {
-                showLogin();
-                // Pre-fill the email field
-                document.getElementById('loginEmail').value = email;
-            }, 2000);
-            
-        } else {
-            showNotification('Failed to create account. Please try again.', 'error');
+        if (!res.ok) {
+            const detail = await res.json().catch(() => ({}));
+            showNotification(detail?.detail || 'Failed to create account. Please try again.', 'error');
+            return;
         }
-        
+        showNotification('Account created successfully! You can now sign in.', 'success');
+        setTimeout(() => {
+            showLogin();
+            document.getElementById('loginEmail').value = email;
+        }, 800);
     } catch (error) {
         console.error('Signup error:', error);
         showNotification('An error occurred during signup. Please try again.', 'error');
