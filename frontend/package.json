@@ -1,5 +1,5 @@
 {
-  "name": "laksham-frontend",
+  "name": "savyre-frontend",
   "version": "0.1.0",
   "private": true,
   "proxy": "http://localhost:8001",
@@ -43,9 +43,12 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.8.0",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/jest": "^27.5.2",
-    "tailwindcss": "^3.4.3",
-    "postcss": "^8.4.35",
-    "autoprefixer": "^10.4.19"
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.17"
   }
 }

@@ -1,5 +1,5 @@
 {
-  "name": "laksham-assessment-portal",
+  "name": "savyre-assessment-portal",
   "version": "1.0.0",
   "description": "A modern assessment portal website for real-life on-job simulated question library - Built with React frontend and FastAPI backend",
   "main": "index.html",
@@ -27,19 +27,20 @@
     "fastapi",
     "typescript"
   ],
-  "author": "Laksham Team",
+  "author": "Savyre Team",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/laksham/assessment-portal.git"
+    "url": "https://github.com/savyre/assessment-portal.git"
   },
   "bugs": {
-    "url": "https://github.com/laksham/assessment-portal/issues"
+    "url": "https://github.com/savyre/assessment-portal/issues"
   },
-  "homepage": "https://laksham.com",
+  "homepage": "https://savyre.com",
   "devDependencies": {
     "concurrently": "^8.2.2"
   },
+  "dependencies": {},
   "engines": {
     "node": ">=16.0.0",
     "npm": ">=8.0.0"

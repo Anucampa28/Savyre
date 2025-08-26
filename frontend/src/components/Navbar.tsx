@@ -1,78 +1,143 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
 const Navbar: React.FC = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const { user, logout } = useAuth();
-  const navigate = useNavigate();
+  const location = useLocation();
+
+  const isHomePage = location.pathname === '/';
+
+  const toggleMenu = () => setIsOpen(!isOpen);
 
   const handleLogout = () => {
     logout();
-    navigate('/');
   };
 
-  const navigation = [
-    { name: 'Home', href: '/' },
-    { name: 'Demo', href: '/demo' },
-    ...(user ? [{ name: 'Dashboard', href: '/dashboard' }] : []),
-  ];
+  const scrollToSection = (sectionId: string) => {
+    if (isHomePage) {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+    setIsOpen(false);
+  };
 
   return (
-    <nav className="bg-white shadow-lg border-b border-gray-100">
+    <nav className="bg-white shadow-lg sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex items-center">
-            <Link to="/" className="flex-shrink-0 flex items-center">
-              <div className="w-8 h-8 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">L</span>
-              </div>
-              <span className="ml-2 text-xl font-bold text-gray-900">Laksham</span>
+        <div className="flex justify-between items-center h-16">
+          {/* Logo */}
+          <div className="flex-shrink-0">
+            <Link to="/" className="text-2xl font-bold text-primary-600">
+              Savyre
             </Link>
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navigation.map((item) => (
+          <div className="hidden md:block">
+            <div className="ml-10 flex items-baseline space-x-4">
               <Link
-                key={item.name}
-                to={item.href}
-                className="text-gray-700 hover:text-primary-600 px-3 py-2 text-sm font-medium transition-colors duration-200"
+                to="/"
+                className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
               >
-                {item.name}
+                Home
               </Link>
-            ))}
-            
-            {user ? (
-              <div className="flex items-center space-x-4">
-                <span className="text-gray-700 text-sm">
-                  Welcome, {user.first_name}
-                </span>
-                <button
-                  onClick={handleLogout}
-                  className="btn-secondary text-sm"
-                >
-                  Logout
-                </button>
-              </div>
-            ) : (
+              
+              {isHomePage && (
+                <>
+                  <button
+                    onClick={() => scrollToSection('features')}
+                    className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                  >
+                    Features
+                  </button>
+                  <button
+                    onClick={() => scrollToSection('assessments')}
+                    className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                  >
+                    Assessments
+                  </button>
+                  <button
+                    onClick={() => scrollToSection('industries')}
+                    className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                  >
+                    Industries
+                  </button>
+                  <button
+                    onClick={() => scrollToSection('pricing')}
+                    className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                  >
+                    Pricing
+                  </button>
+                  <button
+                    onClick={() => scrollToSection('contact')}
+                    className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                  >
+                    Contact
+                  </button>
+                </>
+              )}
+              
               <Link
-                to="/login"
-                className="btn-primary text-sm"
+                to="/demo"
+                className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
               >
-                Sign In
+                Demo
               </Link>
-            )}
+            </div>
+          </div>
+
+          {/* User Menu / Auth Buttons */}
+          <div className="hidden md:block">
+            <div className="ml-4 flex items-center md:ml-6">
+              {user ? (
+                <div className="flex items-center space-x-4">
+                  <span className="text-gray-700 text-sm">
+                    Welcome, {user.first_name}!
+                  </span>
+                  <Link
+                    to="/dashboard"
+                    className="btn-secondary text-sm"
+                  >
+                    Dashboard
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                  >
+                    Logout
+                  </button>
+                </div>
+              ) : (
+                <div className="flex items-center space-x-4">
+                  <Link
+                    to="/login"
+                    className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    to="/login"
+                    className="btn-primary text-sm"
+                  >
+                    Get Started
+                  </Link>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Mobile menu button */}
-          <div className="md:hidden flex items-center">
+          <div className="md:hidden">
             <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-gray-700 hover:text-primary-600 p-2"
+              onClick={toggleMenu}
+              className="text-gray-700 hover:text-primary-600 p-2 rounded-md"
             >
-              {isMenuOpen ? (
+              {isOpen ? (
                 <XMarkIcon className="h-6 w-6" />
               ) : (
                 <Bars3Icon className="h-6 w-6" />
@@ -83,43 +148,96 @@ const Navbar: React.FC = () => {
       </div>
 
       {/* Mobile Navigation */}
-      {isMenuOpen && (
+      {isOpen && (
         <div className="md:hidden">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-gray-100">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                to={item.href}
-                className="text-gray-700 hover:text-primary-600 block px-3 py-2 text-base font-medium"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {item.name}
-              </Link>
-            ))}
+          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t">
+            <Link
+              to="/"
+              className="text-gray-700 hover:text-primary-600 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
+              onClick={() => setIsOpen(false)}
+            >
+              Home
+            </Link>
+            
+            {isHomePage && (
+              <>
+                <button
+                  onClick={() => scrollToSection('features')}
+                  className="text-gray-700 hover:text-primary-600 block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
+                >
+                  Features
+                </button>
+                <button
+                  onClick={() => scrollToSection('assessments')}
+                  className="text-gray-700 hover:text-primary-600 block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
+                >
+                  Assessments
+                </button>
+                <button
+                  onClick={() => scrollToSection('industries')}
+                  className="text-gray-700 hover:text-primary-600 block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
+                >
+                  Industries
+                </button>
+                <button
+                  onClick={() => scrollToSection('pricing')}
+                  className="text-gray-700 hover:text-primary-600 block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
+                >
+                  Pricing
+                </button>
+                <button
+                  onClick={() => scrollToSection('contact')}
+                  className="text-gray-700 hover:text-primary-600 block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
+                >
+                  Contact
+                </button>
+              </>
+            )}
+            
+            <Link
+              to="/demo"
+              className="text-gray-700 hover:text-primary-600 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
+              onClick={() => setIsOpen(false)}
+            >
+              Demo
+            </Link>
             
             {user ? (
-              <div className="pt-4 border-t border-gray-200">
-                <div className="px-3 py-2 text-sm text-gray-700">
-                  Welcome, {user.first_name}
-                </div>
+              <>
+                <Link
+                  to="/dashboard"
+                  className="btn-secondary block text-center mx-3 my-2"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Dashboard
+                </Link>
                 <button
                   onClick={() => {
                     handleLogout();
-                    setIsMenuOpen(false);
+                    setIsOpen(false);
                   }}
-                  className="w-full text-left px-3 py-2 text-base font-medium text-gray-700 hover:text-primary-600"
+                  className="text-gray-700 hover:text-primary-600 block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
                 >
                   Logout
                 </button>
-              </div>
+              </>
             ) : (
-              <Link
-                to="/login"
-                className="btn-primary block text-center mt-4"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Sign In
-              </Link>
+              <>
+                <Link
+                  to="/login"
+                  className="text-gray-700 hover:text-primary-600 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Sign In
+                </Link>
+                <Link
+                  to="/login"
+                  className="btn-primary block text-center mx-3 my-2"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Get Started
+                </Link>
+              </>
             )}
           </div>
         </div>

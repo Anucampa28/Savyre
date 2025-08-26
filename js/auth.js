@@ -337,17 +337,19 @@ function simulateApiCall(delay) {
 // Mock authentication function - UPDATED to check registered users
 async function authenticateUser(email, password) {
     // First check demo credentials
-    if (email === 'demo@laksham.com' && password === 'demo123') {
-        return {
-            id: 'user_001',
+    if (email === 'demo@savyre.com' && password === 'demo123') {
+        // Demo login - simulate successful authentication
+        const demoUser = {
+            id: 'demo-001',
+            email: 'demo@savyre.com',
             firstName: 'Demo',
             lastName: 'User',
-            email: 'demo@laksham.com',
             role: 'hiring_manager',
-            company: 'Laksham Corp',
+            company: 'Savyre Corp',
             avatar: null,
             createdAt: new Date().toISOString()
         };
+        return demoUser;
     }
     
     // Check registered users from localStorage
@@ -362,7 +364,7 @@ async function authenticateUser(email, password) {
             email: user.email,
             phoneNumber: user.phoneNumber,
             role: 'hiring_manager',
-            company: 'Laksham Corp',
+            company: 'Savyre Corp',
             avatar: null,
             createdAt: user.createdAt
         };

@@ -37,7 +37,7 @@ const Login: React.FC = () => {
   const handleDemoLogin = async () => {
     setIsLoading(true);
     try {
-      await login('demo@laksham.com', 'demo123');
+      await login('demo@savyre.com', 'demo123');
       navigate('/dashboard');
     } catch (err) {
       // Handle demo login error
@@ -49,18 +49,12 @@ const Login: React.FC = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 to-secondary-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
-        <div className="text-center">
-          <div className="w-16 h-16 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-xl flex items-center justify-center mx-auto mb-4">
-            <span className="text-white font-bold text-2xl">L</span>
-          </div>
-          <h2 className="text-3xl font-bold text-gray-900">
-            {isLogin ? 'Sign In' : 'Create Account'}
-          </h2>
-          <p className="mt-2 text-gray-600">
-            {isLogin 
-              ? 'Access your Laksham assessment portal' 
-              : 'Join thousands of professionals'
-            }
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Welcome to Savyre
+          </h1>
+          <p className="text-gray-600">
+            Sign in to your account or create a new one to get started
           </p>
         </div>
 
