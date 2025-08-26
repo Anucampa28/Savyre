@@ -1,12 +1,18 @@
 {
   "name": "laksham-assessment-portal",
   "version": "1.0.0",
-  "description": "A modern assessment portal website for real-life on-job simulated question library",
+  "description": "A modern assessment portal website for real-life on-job simulated question library - Built with React frontend and FastAPI backend",
   "main": "index.html",
   "scripts": {
     "start": "python -m http.server 8000",
     "dev": "python -m http.server 8000",
-    "serve": "python -m http.server 8000"
+    "serve": "python -m http.server 8000",
+    "frontend": "cd frontend && npm start",
+    "backend": "cd backend && source .venv/bin/activate && export PYTHONPATH=\"$PWD\" && uvicorn app.main:app --reload --host 0.0.0.0 --port 8001",
+    "dev:full": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "build": "cd frontend && npm run build",
+    "install:frontend": "cd frontend && npm install",
+    "install:backend": "cd backend && python3 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt"
   },
   "keywords": [
     "assessment",
@@ -16,7 +22,10 @@
     "skills",
     "professional",
     "training",
-    "evaluation"
+    "evaluation",
+    "react",
+    "fastapi",
+    "typescript"
   ],
   "author": "Laksham Team",
   "license": "MIT",
@@ -28,10 +37,12 @@
     "url": "https://github.com/laksham/assessment-portal/issues"
   },
   "homepage": "https://laksham.com",
-  "devDependencies": {},
-  "dependencies": {},
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
   },
   "browserslist": [
     "> 1%",
