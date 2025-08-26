@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { 
   AcademicCapIcon, 
   ClockIcon, 
-  CheckCircleIcon,
   ArrowRightIcon,
   PlayIcon
 } from '@heroicons/react/24/outline';
