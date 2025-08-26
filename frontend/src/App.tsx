@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Demo from './pages/Demo';
+import AssessmentSelection from './pages/AssessmentSelection';
 import { AuthProvider } from './contexts/AuthContext';
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/demo" element={<Demo />} />
+              <Route path="/assessment" element={<AssessmentSelection />} />
             </Routes>
           </main>
         </div>
