@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# 🚀 Laksham Assessment Portal - Deployment Script
+# 🚀 Savyre Assessment Portal - Deployment Script
 
-echo "🚀 Starting deployment of Laksham Assessment Portal..."
+echo "🚀 Starting deployment of Savyre Assessment Portal..."
 
 # Check if we're in the right directory
 if [ ! -f "index.html" ]; then
@@ -36,12 +36,12 @@ if [ ! -d ".git" ]; then
     echo "🔧 Initializing Git repository..."
     git init
     git add .
-    git commit -m "Initial commit - Laksham Assessment Portal"
+    git commit -m "Initial commit - Savyre Assessment Portal"
     echo "✅ Git repository initialized."
     echo ""
     echo "📝 Next steps:"
-    echo "1. Create a GitHub repository named 'laksham-assessment-portal'"
-    echo "2. Run: git remote add origin https://github.com/YOUR_USERNAME/laksham-assessment-portal.git"
+    echo "1. Create a GitHub repository named 'savyre-assessment-portal'"
+    echo "2. Run: git remote add origin https://github.com/YOUR_USERNAME/savyre-assessment-portal.git"
     echo "3. Run: git push -u origin main"
     echo "4. Enable GitHub Pages in repository settings"
 else
