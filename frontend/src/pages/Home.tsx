@@ -14,6 +14,9 @@ import {
 const Home: React.FC = () => {
   const [activeTab, setActiveTab] = useState('leadership');
 
+
+
+
   const features = [
     {
       icon: AcademicCapIcon,
@@ -198,12 +201,23 @@ const Home: React.FC = () => {
                   <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
                     {tab.description}
                   </p>
-                  <Link
-                    to="/demo"
-                    className="btn-primary text-lg px-8 py-3"
-                  >
-                    Try {tab.title} Assessment
-                  </Link>
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                    <Link
+                      to="/demo"
+                      className="btn-secondary text-lg px-8 py-3"
+                    >
+                      Try {tab.title} Assessment
+                    </Link>
+                    <Link
+                      to="/assessment"
+                      className="btn-primary text-lg px-8 py-3 flex items-center justify-center gap-2 hover:bg-primary-700 transition-all duration-200"
+                    >
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                      </svg>
+                      Start Assessment
+                    </Link>
+                  </div>
                 </div>
               ))}
             </div>
