@@ -1,4 +1,4 @@
-# 🚀 Deployment Guide - Laksham Assessment Portal
+# �� Deployment Guide - Savyre Assessment Portal
 
 ## **Quick Start - Local Development**
 
@@ -18,8 +18,8 @@ Your website is already running locally! Open your browser and go to:
    # If you have Git set up:
    git init
    git add .
-   git commit -m "Initial commit - Laksham Assessment Portal"
-   git remote add origin https://github.com/yourusername/laksham-assessment-portal.git
+   git commit -m "Initial commit - Savyre Assessment Portal"
+   git remote add origin https://github.com/yourusername/savyre-assessment-portal.git
    git push -u origin main
    ```
    
@@ -33,7 +33,7 @@ Your website is already running locally! Open your browser and go to:
 
 4. **Custom Domain (Optional)**
    - In Netlify dashboard, go to Domain Management
-   - Add your custom domain (e.g., `app.laksham.com`)
+   - Add your custom domain (e.g., `app.savyre.com`)
    - Update DNS settings as instructed
 
 ### **Option 2: Vercel (Alternative - Free)**
@@ -53,7 +53,7 @@ Your website is already running locally! Open your browser and go to:
 ### **Option 3: GitHub Pages (Free)**
 
 1. **Create GitHub Repository**
-   - Name: `laksham-assessment-portal`
+   - Name: `savyre-assessment-portal`
    - Make it public
 
 2. **Push Your Code**
@@ -61,7 +61,7 @@ Your website is already running locally! Open your browser and go to:
    git init
    git add .
    git commit -m "Initial commit"
-   git remote add origin https://github.com/yourusername/laksham-assessment-portal.git
+   git remote add origin https://github.com/yourusername/savyre-assessment-portal.git
    git push -u origin main
    ```
 
@@ -69,12 +69,12 @@ Your website is already running locally! Open your browser and go to:
    - Go to Settings > Pages
    - Source: Deploy from branch
    - Branch: main
-   - Your site will be available at: `https://yourusername.github.io/laksham-assessment-portal`
+   - Your site will be available at: `https://yourusername.github.io/savyre-assessment-portal`
 
 ### **Option 4: AWS S3 + CloudFront (Professional)**
 
 1. **Create S3 Bucket**
-   - Name: `laksham-assessment-portal`
+   - Name: `savyre-assessment-portal`
    - Region: Choose closest to your users
 
 2. **Upload Files**
@@ -102,7 +102,7 @@ Your website is already running locally! Open your browser and go to:
 4. **Demo**: `https://yoursite.com/demo.html`
 
 ### **Test Authentication:**
-- **Demo Login**: `demo@laksham.com` / `demo123`
+- **Demo Login**: `demo@savyre.com` / `demo123`
 - **New User Signup**: Create a test account
 - **Password Reset**: Test the forgot password flow
 
@@ -167,7 +167,7 @@ Your website is already running locally! Open your browser and go to:
 
 ## **🌍 Going Live**
 
-Once deployed, your Laksham Assessment Portal will be available at your chosen URL. Share it with your team and start using it for real assessments!
+Once deployed, your Savyre Assessment Portal will be available at your chosen URL. Share it with your team and start using it for real assessments!
 
 ### **Next Steps:**
 1. **Test thoroughly** on different devices and browsers

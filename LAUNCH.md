@@ -1,4 +1,4 @@
-# 🚀 **LAUNCH GUIDE - Laksham Assessment Portal**
+# 🚀 **LAUNCH GUIDE - Savyre Assessment Portal**
 
 ## **🎯 IMMEDIATE LAUNCH - Your Website is LIVE!**
 
@@ -11,7 +11,7 @@ Open this URL in your browser to see your live website!
 ## **📱 Test Your Website**
 
 ### **1. Homepage (http://localhost:8000/)**
-- ✅ View the main Laksham landing page
+- ✅ View the main Savyre landing page
 - ✅ Test navigation and responsive design
 - ✅ Click "Sign In" to test authentication flow
 
@@ -22,7 +22,7 @@ Open this URL in your browser to see your live website!
 - ✅ Test social login options
 
 ### **3. Dashboard (http://localhost:8000/dashboard.html)**
-- ✅ **Demo Login**: `demo@laksham.com` / `demo123`
+- ✅ **Demo Login**: `demo@savyre.com` / `demo123`
 - ✅ View hiring manager dashboard
 - ✅ Test interactive features
 - ✅ Check mobile responsiveness
@@ -44,14 +44,14 @@ Open this URL in your browser to see your live website!
 
 ### **Option B: GitHub Pages (10 minutes)**
 
-1. **Create GitHub repo**: `laksham-assessment-portal`
+1. **Create GitHub repo**: `savyre-assessment-portal`
 2. **Push your code**:
    ```bash
-   git remote add origin https://github.com/YOUR_USERNAME/laksham-assessment-portal.git
+   git remote add origin https://github.com/YOUR_USERNAME/savyre-assessment-portal.git
    git push -u origin main
    ```
 3. **Enable Pages** in repo settings
-4. **Your site**: `https://YOUR_USERNAME.github.io/laksham-assessment-portal`
+4. **Your site**: `https://YOUR_USERNAME.github.io/savyre-assessment-portal`
 
 ### **Option C: Vercel (5 minutes)**
 
@@ -101,7 +101,7 @@ python3 -m http.server 8000
 ## **🎉 SUCCESS INDICATORS**
 
 You'll know everything is working when:
-- ✅ Homepage loads with Laksham branding
+- ✅ Homepage loads with Savyre branding
 - ✅ Navigation works smoothly
 - ✅ Login page shows all forms
 - ✅ Dashboard displays with demo data
@@ -120,7 +120,7 @@ Once deployed to production:
 
 ## **🚀 READY TO LAUNCH?**
 
-Your Laksham Assessment Portal is ready! 
+Your Savyre Assessment Portal is ready! 
 
 **Current Status**: ✅ **LOCALLY RUNNING** at http://localhost:8000
 **Next Step**: Choose your deployment platform and go live!
