@@ -1,6 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import ChatWidget from './components/ChatWidget';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
@@ -14,7 +16,7 @@ function App() {
       <Router>
         <div className="min-h-screen bg-gradient-to-br from-primary-50 to-secondary-50">
           <Navbar />
-          <main>
+          <main className="flex-grow">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
@@ -23,6 +25,8 @@ function App() {
               <Route path="/assessment" element={<AssessmentSelection />} />
             </Routes>
           </main>
+          <Footer />
+          <ChatWidget />
         </div>
       </Router>
     </AuthProvider>
