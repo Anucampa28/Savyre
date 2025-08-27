@@ -1,316 +1,280 @@
-# 🚀 Laksham Assessment Portal - React Version
+# Savyre Assessment Portal - React Frontend
 
-A modern, professional assessment portal built with **React + TypeScript** frontend and **FastAPI + PostgreSQL** backend. Perfect for GitHub Codespaces and modern development workflows.
+A modern, responsive assessment portal built with React, TypeScript, and Tailwind CSS. This application provides a comprehensive platform for real-life on-job skill assessments and professional development.
 
-## ✨ **What's New in React Version**
+## 🚀 Quick Start
 
-### **Frontend Improvements**
-- 🎯 **React 18** with TypeScript for type safety
-- 🎨 **Tailwind CSS** for modern, responsive design
-- 🚀 **React Router** for seamless navigation
-- 🔐 **Context API** for state management
-- 📱 **Mobile-first responsive design**
-- 🎭 **Component-based architecture**
+### Prerequisites
+- Node.js >= 16.0.0
+- npm >= 8.0.0
+- Python 3.12+
+- PostgreSQL
 
-### **Development Experience**
-- 🔥 **Hot reloading** for instant feedback
-- 🧪 **TypeScript** for better IDE support
-- 📦 **Modern build tools** with Create React App
-- 🎯 **ESLint & Prettier** ready
-- 🐳 **Docker integration** for database
-- 📚 **Comprehensive component library**
+### Installation
 
-## 🏗️ **Architecture Overview**
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/savyre/assessment-portal.git
+   cd assessment-portal
+   ```
 
-```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   React Frontend│    │   FastAPI Backend│    │   PostgreSQL   │
-│   (Port 3000)   │◄──►│   (Port 8001)   │◄──►│   (Port 5432)  │
-│                 │    │                 │    │                 │
-│ • TypeScript    │    │ • Python 3.12   │    │ • Docker       │
-│ • Tailwind CSS  │    │ • SQLAlchemy    │    │ • Migrations   │
-│ • React Router  │    │ • JWT Auth      │    │ • ORM Models   │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-```
+2. **Install frontend dependencies**
+   ```bash
+   npm run install:frontend
+   ```
 
-## 🚀 **Quick Start**
+3. **Install backend dependencies**
+   ```bash
+   npm run install:backend
+   ```
 
-### **1. Install Dependencies**
-```bash
-# Install frontend dependencies
-npm run install:frontend
+4. **Start the development servers**
+   ```bash
+   npm run dev:full
+   ```
 
-# Install backend dependencies
-npm run install:backend
-```
-
-### **2. Start the Database**
-```bash
-# Start PostgreSQL in Docker
-docker-compose up -d db
-```
-
-### **3. Run the Application**
-```bash
-# Option A: Run both frontend and backend
-npm run dev:full
-
-# Option B: Run separately
-npm run backend    # Terminal 1
-npm run frontend   # Terminal 2
-```
-
-### **4. Access Your App**
+The application will be available at:
 - **Frontend**: http://localhost:3000
 - **Backend API**: http://localhost:8001
-- **API Docs**: http://localhost:8001/docs
+- **API Documentation**: http://localhost:8001/docs
 
-## 🎯 **Features**
+## ✨ Features
 
-### **Authentication System**
-- ✅ User registration and login
-- ✅ JWT token management
-- ✅ Email verification (ready for implementation)
-- ✅ Demo account: `demo@laksham.com` / `demo123`
+- **Modern React Architecture** - Built with React 18, TypeScript, and modern hooks
+- **Responsive Design** - Mobile-first approach with Tailwind CSS
+- **Interactive Assessments** - Dynamic content switching between skill categories
+- **User Authentication** - JWT-based login system with demo accounts
+- **Real-time Updates** - Live data updates and progress tracking
+- **Industry-Specific Solutions** - Tailored assessments for different professional domains
+- **Comprehensive Dashboard** - User statistics, assessment history, and analytics
+- **Contact & Support** - Integrated contact forms and company information
 
-### **Assessment Management**
-- ✅ Interactive assessment dashboard
-- ✅ Real-time progress tracking
-- ✅ Search and filtering
-- ✅ Responsive card layouts
+## 🛠️ Tech Stack
 
-### **Modern UI/UX**
-- ✅ **Tailwind CSS** utility classes
-- ✅ **Heroicons** for consistent icons
-- ✅ **Responsive design** for all devices
-- ✅ **Smooth animations** and transitions
-- ✅ **Dark mode ready** (easily implementable)
-
-## 🛠️ **Tech Stack**
-
-### **Frontend**
-- **React 18** - Modern React with hooks
+### Frontend
+- **React 18** - Latest React with concurrent features
 - **TypeScript** - Type-safe development
-- **Tailwind CSS** - Utility-first CSS framework
-- **React Router** - Client-side routing
+- **Tailwind CSS 3.3.x** - Utility-first CSS framework
+- **React Router 6** - Client-side routing
 - **Heroicons** - Beautiful SVG icons
-- **Headless UI** - Accessible components
+- **Headless UI** - Accessible UI components
 
-### **Backend**
+### Backend
 - **FastAPI** - Modern Python web framework
-- **SQLAlchemy** - Python ORM
-- **PostgreSQL** - Production database
-- **Alembic** - Database migrations
-- **JWT** - Authentication tokens
+- **SQLAlchemy** - SQL toolkit and ORM
+- **PostgreSQL** - Robust relational database
+- **Alembic** - Database migration tool
+- **JWT Authentication** - Secure user authentication
 
-### **Development Tools**
-- **Create React App** - React development setup
-- **ESLint** - Code linting
-- **Prettier** - Code formatting
-- **Docker** - Containerized database
-- **Concurrently** - Run multiple services
+### Development Tools
+- **Create React App** - React development environment
+- **PostCSS & Autoprefixer** - CSS processing
+- **ESLint** - Code quality and consistency
+- **Concurrently** - Run multiple commands simultaneously
 
-## 📁 **Project Structure**
+## 📁 Project Structure
 
 ```
-laksham-assessment-portal/
-├── frontend/                 # React application
-│   ├── src/
-│   │   ├── components/      # Reusable UI components
-│   │   ├── pages/          # Page components
-│   │   ├── contexts/       # React contexts
-│   │   ├── types/          # TypeScript types
-│   │   └── App.tsx         # Main app component
-│   ├── public/             # Static assets
-│   └── package.json        # Frontend dependencies
-├── backend/                 # FastAPI application
-│   ├── app/
-│   │   ├── models/         # Database models
-│   │   ├── routers/        # API endpoints
-│   │   ├── services/       # Business logic
-│   │   └── core/           # Configuration
-│   ├── alembic/            # Database migrations
-│   └── requirements.txt    # Python dependencies
-├── docker-compose.yml      # Database setup
-└── package.json            # Root scripts
+frontend/
+├── public/                 # Static assets
+├── src/
+│   ├── components/         # Reusable UI components
+│   │   ├── Navbar.tsx     # Navigation component
+│   │   └── ...
+│   ├── contexts/          # React contexts
+│   │   └── AuthContext.tsx # Authentication state
+│   ├── pages/             # Page components
+│   │   ├── Home.tsx       # Landing page
+│   │   ├── Login.tsx      # Authentication
+│   │   ├── Dashboard.tsx  # User dashboard
+│   │   └── Demo.tsx       # Assessment demos
+│   ├── App.tsx            # Main app component
+│   ├── index.tsx          # App entry point
+│   └── index.css          # Global styles & Tailwind
+├── package.json            # Dependencies & scripts
+├── tailwind.config.js      # Tailwind configuration
+└── postcss.config.js       # PostCSS configuration
+
+backend/
+├── app/                    # FastAPI application
+├── alembic/               # Database migrations
+├── requirements.txt        # Python dependencies
+└── run.sh                 # Backend startup script
 ```
 
-## 🔧 **Development Commands**
+## 🎯 Key Components
 
-### **Frontend Development**
+### Home Page (`/`)
+- **Hero Section** - Compelling introduction with call-to-action
+- **Features** - Why choose Savyre platform
+- **Assessment Categories** - Interactive tabs for different skill types
+- **Industries** - Industry-specific solutions
+- **Pricing Plans** - Flexible subscription options
+- **Contact Form** - Get in touch with the team
+
+### Login Page (`/login`)
+- **Authentication Forms** - Sign in and sign up
+- **Demo Account** - Try the platform with sample credentials
+- **Form Validation** - Input validation and error handling
+- **Responsive Design** - Works on all device sizes
+
+### Dashboard (`/dashboard`)
+- **User Overview** - Welcome message and quick stats
+- **Assessment History** - Track completed assessments
+- **Performance Metrics** - Success rates and completion times
+- **Search & Filter** - Find specific assessments
+- **Quick Actions** - Start new assessments
+
+### Demo Page (`/demo`)
+- **Assessment Showcase** - Preview available assessments
+- **Interactive Elements** - Sample questions and scenarios
+- **Start Assessment** - Begin demo assessments
+- **Progress Tracking** - Monitor assessment completion
+
+## 🚀 Development Commands
+
+### Frontend Development
 ```bash
 cd frontend
 npm start          # Start development server
 npm run build      # Build for production
 npm test           # Run tests
-npm run eject      # Eject from CRA (irreversible)
+npm run eject      # Eject from Create React App
 ```
 
-### **Backend Development**
+### Backend Development
 ```bash
 cd backend
 source .venv/bin/activate
-uvicorn app.main:app --reload --port 8001
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8001
 ```
 
-### **Database Management**
+### Full-Stack Development
 ```bash
-# Start database
-docker-compose up -d db
-
-# Run migrations
-cd backend
-alembic upgrade head
-
-# View database
-docker exec -it laksham_postgres psql -U laksham -d laksham
+npm run dev:full   # Start both frontend and backend
+npm run frontend   # Start only frontend
+npm run backend    # Start only backend
 ```
 
-## 🌐 **API Endpoints**
+## 🔌 API Endpoints
 
-### **Authentication**
-- `POST /api/auth/signup` - User registration
-- `POST /api/auth/login` - User login
-- `GET /api/auth/me` - Get current user
-- `GET /api/auth/verify` - Email verification
+The backend provides RESTful API endpoints for:
 
-### **Assessments**
-- `GET /api/assessments` - List assessments
-- `POST /api/assessments` - Create assessment
-- `GET /api/assessments/{id}` - Get assessment details
+- **Authentication**: `/auth/login`, `/auth/signup`, `/auth/verify`
+- **Users**: `/users/me`, `/users/profile`
+- **Assessments**: `/assessments/`, `/assessments/{id}`
+- **Results**: `/results/`, `/results/{id}`
+- **Analytics**: `/analytics/performance`, `/analytics/progress`
 
-### **Candidates**
-- `GET /api/candidates` - List candidates
-- `POST /api/candidates` - Create candidate
+## 🎨 Customization
 
-## 🎨 **Customization**
-
-### **Colors & Theme**
-The color scheme is defined in `frontend/tailwind.config.js`:
+### Colors & Theme
+The application uses a custom color scheme defined in `tailwind.config.js`:
 
 ```javascript
 colors: {
   primary: {
     50: '#eff6ff',
-    500: '#6366f1',    // Main brand color
+    500: '#6366f1',
     600: '#4f46e5',
+    700: '#4338ca',
   },
   secondary: {
-    500: '#10b981',    // Success/accent color
+    50: '#ecfdf5',
+    500: '#10b981',
+    600: '#059669',
+  },
+  accent: {
+    50: '#fffbeb',
+    500: '#f59e0b',
+    600: '#d97706',
   }
 }
 ```
 
-### **Components**
-All components are built with Tailwind CSS and can be easily customized:
-- **Buttons**: Use `btn-primary`, `btn-secondary` classes
-- **Cards**: Use `card` class for consistent styling
-- **Forms**: Use `input-field` class for inputs
+### Component Classes
+Custom utility classes are defined in `src/index.css`:
 
-## 🚀 **Deployment**
+```css
+@layer components {
+  .btn-primary { /* Primary button styles */ }
+  .btn-secondary { /* Secondary button styles */ }
+  .card { /* Card component styles */ }
+  .input-field { /* Input field styles */ }
+}
+```
 
-### **Frontend (React)**
+## 🚀 Deployment
+
+### Frontend Build
 ```bash
 cd frontend
 npm run build
-# Deploy the 'build' folder to:
-# - Netlify
-# - Vercel
-# - AWS S3
-# - GitHub Pages
 ```
 
-### **Backend (FastAPI)**
-```bash
-cd backend
-# Deploy to:
-# - Heroku
-# - DigitalOcean
-# - AWS EC2
-# - Google Cloud Run
-```
+The build output will be in the `build/` directory, ready for deployment to any static hosting service.
 
-## 🔒 **Security Features**
+### Backend Deployment
+The FastAPI backend can be deployed using:
+- **Docker**: Use the provided `docker-compose.yml`
+- **Cloud Platforms**: Deploy to Heroku, AWS, or Google Cloud
+- **VPS**: Traditional server deployment with uvicorn
 
-- ✅ **JWT Authentication** with secure tokens
-- ✅ **Password hashing** with bcrypt
-- ✅ **CORS protection** for API endpoints
-- ✅ **Input validation** with Pydantic
-- ✅ **SQL injection protection** with SQLAlchemy
+## 🔒 Security Features
 
-## 📱 **Responsive Design**
+- **JWT Authentication** - Secure token-based authentication
+- **Input Validation** - Server-side validation of all inputs
+- **CORS Protection** - Configured for production environments
+- **Environment Variables** - Secure configuration management
+- **HTTPS Ready** - SSL/TLS support for production
 
-The application is fully responsive with breakpoints:
-- **Mobile**: < 640px
-- **Tablet**: 640px - 1024px
-- **Desktop**: > 1024px
+## 📱 Responsive Design
 
-## 🧪 **Testing**
+The application is built with a mobile-first approach:
+- **Mobile**: Optimized for small screens and touch interfaces
+- **Tablet**: Responsive layouts for medium-sized devices
+- **Desktop**: Full-featured experience on large screens
+- **Accessibility**: WCAG compliant with proper ARIA labels
 
-### **Frontend Testing**
+## 🧪 Testing
+
+### Frontend Testing
 ```bash
 cd frontend
-npm test           # Run test suite
-npm run test:coverage  # Coverage report
+npm test           # Run all tests
+npm run test:watch # Watch mode for development
+npm run test:coverage # Generate coverage report
 ```
 
-### **Backend Testing**
+### Backend Testing
 ```bash
 cd backend
-pytest             # Run Python tests
+source .venv/bin/activate
+pytest             # Run all tests
 pytest --cov       # With coverage
 ```
 
-## 🐛 **Troubleshooting**
+## 🤝 Contributing
 
-### **Common Issues**
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-1. **Port conflicts**: Ensure ports 3000, 8001, and 5432 are available
-2. **Database connection**: Check if PostgreSQL container is running
-3. **Dependencies**: Run `npm install` in both frontend and root directories
-4. **Python environment**: Ensure virtual environment is activated
+## 📄 License
 
-### **Reset Everything**
-```bash
-# Stop all services
-docker-compose down
-pkill -f "uvicorn"
-pkill -f "react-scripts"
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-# Clean install
-rm -rf frontend/node_modules
-rm -rf backend/.venv
-npm run install:frontend
-npm run install:backend
-```
+## 🆘 Support
 
-## 🤝 **Contributing**
-
-1. **Fork** the repository
-2. **Create** a feature branch: `git checkout -b feature-name`
-3. **Make** your changes
-4. **Test** thoroughly
-5. **Commit** with clear messages
-6. **Push** to your branch
-7. **Submit** a pull request
-
-## 📄 **License**
-
-This project is open source and available under the [MIT License](LICENSE).
-
-## 🎉 **Why React is Better for Codespaces**
-
-- **Hot Reloading**: Instant feedback during development
-- **Component Debugging**: Better DevTools integration
-- **TypeScript Support**: Enhanced IDE experience
-- **Modern Tooling**: ESLint, Prettier, and more
-- **Dependency Management**: Clear package.json structure
-- **Testing Framework**: Jest and React Testing Library
-- **Build Process**: Webpack for optimization
-- **Team Collaboration**: Consistent development environment
+- **Documentation**: Check this README and inline code comments
+- **Issues**: Report bugs and feature requests on GitHub
+- **Email**: hello@savyre.com
+- **Phone**: +1 (555) 123-4567
 
 ---
 
-**Built with ❤️ using React, TypeScript, and Tailwind CSS**
+**Built with ❤️ by the Savyre Team**
 
-**Ready for GitHub Codespaces and modern development workflows!** 🚀
+Transform your assessment experience with real-world workplace simulations and comprehensive skill evaluation.
