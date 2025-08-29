@@ -6,7 +6,9 @@ import {
   CheckCircleIcon, 
   ExclamationTriangleIcon,
   PlusIcon,
-  MagnifyingGlassIcon
+  MagnifyingGlassIcon,
+  BuildingOfficeIcon,
+  UserIcon
 } from '@heroicons/react/24/outline';
 
 interface Assessment {
@@ -108,11 +110,27 @@ const Dashboard: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-8">
+          <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary-100 text-primary-800 text-sm font-medium mb-4">
+            {user?.user_type === 'employer' ? (
+              <>
+                <BuildingOfficeIcon className="h-4 w-4 mr-2" />
+                Employer Dashboard
+              </>
+            ) : (
+              <>
+                <UserIcon className="h-4 w-4 mr-2" />
+                Candidate Dashboard
+              </>
+            )}
+          </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Welcome back, {user?.first_name || 'User'}!
           </h1>
           <p className="text-gray-600">
-            Here's your Savyre assessment overview and performance metrics
+            {user?.user_type === 'employer' 
+              ? "Manage your company's assessments and review candidate performance"
+              : "Track your assessment progress and skill development"
+            }
           </p>
         </div>
 
@@ -147,7 +165,7 @@ const Dashboard: React.FC = () => {
           </div>
           <button className="btn-primary flex items-center">
             <PlusIcon className="h-5 w-5 mr-2" />
-            New Assessment
+            {user?.user_type === 'employer' ? 'Create Assessment' : 'Find Assessment'}
           </button>
         </div>
 

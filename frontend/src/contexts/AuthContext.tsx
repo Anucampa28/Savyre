@@ -6,11 +6,12 @@ interface User {
   first_name: string;
   last_name: string;
   is_verified: boolean;
+  user_type: 'candidate' | 'employer';
 }
 
 interface AuthContextType {
   user: User | null;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string, userType: 'candidate' | 'employer') => Promise<void>;
   logout: () => void;
   isLoading: boolean;
   error: string | null;
@@ -66,7 +67,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const login = async (email: string, password: string) => {
+  const login = async (email: string, password: string, userType: 'candidate' | 'employer') => {
     try {
       setError(null);
       setIsLoading(true);
@@ -76,12 +77,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, user_type: userType }),
       });
 
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem('token', data.access_token);
+        localStorage.setItem('userType', userType);
         await fetchUser(data.access_token);
       } else {
         const errorData = await response.json();
