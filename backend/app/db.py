@@ -23,7 +23,8 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine, futu
 def init_database() -> None:
     # Import models so metadata is populated
     from .models.user import User
-    from .models.assessment import Assessment
+    from .models.assessment import Assessment, AssessmentQuestion, AssessmentAttempt, AssessmentAnswer
+    from .models.question import Question
     from .models.candidate import Candidate
 
     Base.metadata.create_all(bind=engine)

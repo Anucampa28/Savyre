@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .routers import auth, assessments, candidates
+from .routers import auth, assessments, candidates, questions
 from .db import init_database
 
 
@@ -21,6 +21,7 @@ def create_app() -> FastAPI:
     app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
     app.include_router(assessments.router, prefix="/api/assessments", tags=["assessments"])
     app.include_router(candidates.router, prefix="/api/candidates", tags=["candidates"])
+    app.include_router(questions.router, prefix="/api/questions", tags=["questions"])
 
     @app.get("/api/health")
     def health_check():

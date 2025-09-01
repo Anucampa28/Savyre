@@ -105,6 +105,18 @@ const Navbar: React.FC = () => {
                   >
                     Dashboard
                   </Link>
+                  <Link
+                    to="/assessments"
+                    className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                  >
+                    Assessments
+                  </Link>
+                  <Link
+                    to="/assessments/create"
+                    className="bg-primary-600 text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-primary-700 transition-colors duration-200"
+                  >
+                    Create Assessment
+                  </Link>
                   <button
                     onClick={handleLogout}
                     className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"

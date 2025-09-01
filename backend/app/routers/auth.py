@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from jose import JWTError
+from typing import Optional
 
 from ..db import get_db
 from ..models.user import User
@@ -68,7 +69,7 @@ def login(payload: LoginRequest, db: Session = Depends(get_db)):
 
 
 @router.get("/me", response_model=UserRead)
-def me(authorization: str | None = None, db: Session = Depends(get_db)):
+def me(authorization: Optional[str] = None, db: Session = Depends(get_db)):
     if not authorization or not authorization.lower().startswith("bearer "):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Missing token")
     token = authorization.split(" ", 1)[1]

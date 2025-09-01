@@ -49,3 +49,17 @@ def is_password_pwned(password: str) -> bool:
         return False
 
 
+def get_current_user(token: str, db):
+    """Get current user from JWT token"""
+    try:
+        payload = decode_access_token(token)
+        user_id = int(payload["sub"])
+        from ..models.user import User
+        user = db.query(User).filter(User.id == user_id).first()
+        if not user:
+            return None
+        return user
+    except Exception:
+        return None
+
+

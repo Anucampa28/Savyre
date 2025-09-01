@@ -14,9 +14,6 @@ import {
 const Home: React.FC = () => {
   const [activeTab, setActiveTab] = useState('leadership');
 
-
-
-
   const features = [
     {
       icon: AcademicCapIcon,
@@ -97,15 +94,15 @@ const Home: React.FC = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
             <Link
               to="/login"
-              className="btn-secondary text-lg px-8 py-3"
+              className="bg-white text-primary-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
             >
-              Start Free Assessment
+              Get Started
             </Link>
             <Link
               to="/demo"
-              className="bg-white text-primary-600 hover:bg-gray-50 font-medium px-8 py-3 rounded-lg transition-colors duration-200 text-lg"
+              className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-primary-600 transition-colors"
             >
-              Watch Demo
+              View Demo
             </Link>
           </div>
           
@@ -128,7 +125,7 @@ const Home: React.FC = () => {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-20 bg-white">
+      <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -142,24 +139,20 @@ const Home: React.FC = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (
-              <div key={index} className="card text-center group hover:shadow-xl transition-shadow duration-300">
-                <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary-200 transition-colors duration-200">
-                  <feature.icon className="w-8 h-8 text-primary-600" />
+              <div key={index} className="text-center">
+                <div className="mx-auto w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mb-4">
+                  <feature.icon className="h-8 w-8 text-primary-600" />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  {feature.title}
-                </h3>
-                <p className="text-gray-600">
-                  {feature.description}
-                </p>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">{feature.title}</h3>
+                <p className="text-gray-600">{feature.description}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Assessments Section */}
-      <section id="assessments" className="py-20 bg-gray-50">
+      {/* Assessment Categories */}
+      <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -170,63 +163,28 @@ const Home: React.FC = () => {
               every aspect of professional competency.
             </p>
           </div>
-
-          {/* Assessment Tabs */}
-          <div className="bg-white rounded-xl shadow-lg p-6">
-            <div className="flex flex-wrap justify-center mb-8 border-b border-gray-200">
-              {assessmentTabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`px-6 py-3 text-sm font-medium rounded-t-lg transition-colors duration-200 ${
-                    activeTab === tab.id
-                      ? 'text-primary-600 border-b-2 border-primary-600 bg-primary-50'
-                      : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
-                  }`}
-                >
-                  {tab.title}
-                </button>
-              ))}
-            </div>
-
-            <div className="text-center py-12">
-              {assessmentTabs.map((tab) => (
-                <div
-                  key={tab.id}
-                  className={activeTab === tab.id ? 'block' : 'hidden'}
-                >
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                    {tab.title} Assessments
-                  </h3>
-                  <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
-                    {tab.description}
-                  </p>
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <Link
-                      to="/demo"
-                      className="btn-secondary text-lg px-8 py-3"
-                    >
-                      Try {tab.title} Assessment
-                    </Link>
-                    <Link
-                      to="/assessment"
-                      className="btn-primary text-lg px-8 py-3 flex items-center justify-center gap-2 hover:bg-primary-700 transition-all duration-200"
-                    >
-                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                      </svg>
-                      Start Assessment
-                    </Link>
-                  </div>
-                </div>
-              ))}
-            </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {assessmentTabs.map((tab) => (
+              <div
+                key={tab.id}
+                className={`p-6 rounded-xl border-2 cursor-pointer transition-all duration-200 ${
+                  activeTab === tab.id
+                    ? 'border-primary-500 bg-primary-50'
+                    : 'border-gray-200 bg-white hover:border-primary-300'
+                }`}
+                onClick={() => setActiveTab(tab.id)}
+              >
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">{tab.title}</h3>
+                <p className="text-gray-600 text-sm">{tab.description}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* Industries Section */}
-      <section id="industries" className="py-20 bg-white">
+      <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -240,14 +198,10 @@ const Home: React.FC = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {industries.map((industry, index) => (
-              <div key={index} className="card text-center hover:shadow-xl transition-shadow duration-300">
+              <div key={index} className="bg-white p-6 rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
                 <div className="text-4xl mb-4">{industry.icon}</div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  {industry.name}
-                </h3>
-                <p className="text-gray-600">
-                  {industry.description}
-                </p>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">{industry.name}</h3>
+                <p className="text-gray-600 text-sm">{industry.description}</p>
               </div>
             ))}
           </div>
@@ -255,7 +209,7 @@ const Home: React.FC = () => {
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="py-20 bg-gray-50">
+      <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -269,35 +223,47 @@ const Home: React.FC = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {pricingPlans.map((plan, index) => (
-              <div key={index} className={`card relative ${plan.popular ? 'ring-2 ring-primary-500' : ''}`}>
+              <div
+                key={index}
+                className={`relative bg-white p-8 rounded-xl shadow-sm border-2 ${
+                  plan.popular
+                    ? 'border-primary-500 shadow-lg'
+                    : 'border-gray-200'
+                }`}
+              >
                 {plan.popular && (
                   <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                    <span className="bg-primary-500 text-white px-4 py-1 rounded-full text-sm font-medium">
+                    <span className="bg-primary-600 text-white px-4 py-1 rounded-full text-sm font-medium">
                       Most Popular
                     </span>
                   </div>
                 )}
+                
                 <div className="text-center mb-6">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
-                  <div className="text-4xl font-bold text-primary-600">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">{plan.name}</h3>
+                  <div className="text-4xl font-bold text-gray-900 mb-1">
                     {plan.price}
-                    <span className="text-lg text-gray-500">{plan.period}</span>
+                    <span className="text-lg font-normal text-gray-500">{plan.period}</span>
                   </div>
                 </div>
+                
                 <ul className="space-y-3 mb-8">
                   {plan.features.map((feature, featureIndex) => (
                     <li key={featureIndex} className="flex items-center">
-                      <CheckIcon className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
-                      <span className="text-gray-600">{feature}</span>
+                      <CheckIcon className="h-5 w-5 text-green-500 mr-3 flex-shrink-0" />
+                      <span className="text-gray-700">{feature}</span>
                     </li>
                   ))}
                 </ul>
-                <button className={`w-full py-3 px-6 rounded-lg font-medium transition-colors duration-200 ${
-                  plan.popular 
-                    ? 'btn-primary' 
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}>
-                  {plan.name === 'Enterprise' ? 'Contact Sales' : 'Get Started'}
+                
+                <button
+                  className={`w-full py-3 px-4 rounded-lg font-medium transition-colors ${
+                    plan.popular
+                      ? 'bg-primary-600 text-white hover:bg-primary-700'
+                      : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
+                  }`}
+                >
+                  Get Started
                 </button>
               </div>
             ))}
@@ -306,7 +272,7 @@ const Home: React.FC = () => {
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-20 bg-white">
+      <section className="py-20 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
@@ -332,7 +298,7 @@ const Home: React.FC = () => {
                       id="name"
                       name="name"
                       required
-                      className="input-field"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                       placeholder="Your Name"
                     />
                   </div>
@@ -343,9 +309,9 @@ const Home: React.FC = () => {
                     <input
                       type="email"
                       id="email"
-                      name="email"
+                      name="name"
                       required
-                      className="input-field"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                       placeholder="your@email.com"
                     />
                   </div>
@@ -358,7 +324,7 @@ const Home: React.FC = () => {
                     type="text"
                     id="company"
                     name="company"
-                    className="input-field"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                     placeholder="Your Company"
                   />
                 </div>
@@ -371,11 +337,11 @@ const Home: React.FC = () => {
                     name="message"
                     rows={5}
                     required
-                    className="input-field"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
                     placeholder="Tell us about your assessment needs..."
                   />
                 </div>
-                <button type="submit" className="btn-primary w-full py-3">
+                <button type="submit" className="w-full bg-primary-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-primary-700 transition-colors">
                   Send Message
                 </button>
               </form>

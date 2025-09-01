@@ -1,204 +1,286 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../contexts/AuthContext';
+import { Link } from 'react-router-dom';
 import { 
-  ChartBarIcon, 
-  ClockIcon, 
-  CheckCircleIcon, 
-  ExclamationTriangleIcon,
-  PlusIcon,
-  MagnifyingGlassIcon
+  DocumentTextIcon,
+  VideoCameraIcon,
+  ChatBubbleLeftRightIcon,
+  ArrowUpIcon,
+  ArrowDownIcon,
+  UsersIcon,
+  TrophyIcon,
+  StarIcon,
+  CogIcon,
+  BellIcon,
+  QuestionMarkCircleIcon,
+  AcademicCapIcon,
+  ChartBarIcon
 } from '@heroicons/react/24/outline';
 
-interface Assessment {
-  id: number;
-  title: string;
-  description: string;
-  difficulty: string;
-  duration_minutes: number;
-  created_at: string;
-}
-
 const Dashboard: React.FC = () => {
-  const { user } = useAuth();
-  const [assessments, setAssessments] = useState<Assessment[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [timeFilter, setTimeFilter] = useState('30');
 
-  // Mock data for demonstration
+  // Mock data for dashboard metrics
+  const [metrics, setMetrics] = useState({
+    assessmentCandidates: 0,
+    videoCandidates: 0,
+    chatbotCandidates: 0,
+    totalAssessments: 0,
+    completionRate: 0,
+    averageScore: 0
+  });
+
+  // Simulate data loading
   useEffect(() => {
-    const mockAssessments: Assessment[] = [
-      {
-        id: 1,
-        title: 'Leadership Assessment',
-        description: 'Evaluate your leadership skills and decision-making abilities',
-        difficulty: 'Advanced',
-        duration_minutes: 45,
-        created_at: '2024-01-15'
-      },
-      {
-        id: 2,
-        title: 'Technical Skills Review',
-        description: 'Test your technical knowledge and problem-solving skills',
-        difficulty: 'Intermediate',
-        duration_minutes: 30,
-        created_at: '2024-01-10'
-      },
-      {
-        id: 3,
-        title: 'Communication Skills',
-        description: 'Assess your verbal and written communication abilities',
-        difficulty: 'Beginner',
-        duration_minutes: 25,
-        created_at: '2024-01-05'
-      }
-    ];
-    
-    setTimeout(() => {
-      setAssessments(mockAssessments);
-      setIsLoading(false);
+    const timer = setTimeout(() => {
+      setMetrics({
+        assessmentCandidates: 24,
+        videoCandidates: 18,
+        chatbotCandidates: 12,
+        totalAssessments: 156,
+        completionRate: 87,
+        averageScore: 82
+      });
     }, 1000);
+
+    return () => clearTimeout(timer);
   }, []);
 
-  const filteredAssessments = assessments.filter(assessment =>
-    assessment.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    assessment.description.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const stats = [
-    {
-      name: 'Total Assessments',
-      value: assessments.length,
-      icon: ChartBarIcon,
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-100'
-    },
-    {
-      name: 'Completed',
-      value: 2,
-      icon: CheckCircleIcon,
-      color: 'text-green-600',
-      bgColor: 'bg-green-100'
-    },
-    {
-      name: 'In Progress',
-      value: 1,
-      icon: ClockIcon,
-      color: 'text-yellow-600',
-      bgColor: 'bg-yellow-100'
-    },
-    {
-      name: 'Pending',
-      value: 0,
-      icon: ExclamationTriangleIcon,
-      color: 'text-red-600',
-      bgColor: 'bg-red-100'
-    }
+  // Mock chart data
+  const chartData = [
+    { day: 'Mon', candidates: 4 },
+    { day: 'Tue', candidates: 6 },
+    { day: 'Wed', candidates: 8 },
+    { day: 'Thu', candidates: 5 },
+    { day: 'Fri', candidates: 7 },
+    { day: 'Sat', candidates: 3 },
+    { day: 'Sun', candidates: 2 }
   ];
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary-600"></div>
-      </div>
-    );
-  }
+  const funnelData = [
+    { stage: 'Started', count: 45, percentage: 100 },
+    { stage: 'In Progress', count: 38, percentage: 84 },
+    { stage: 'Completed', count: 32, percentage: 71 },
+    { stage: 'Passed', count: 28, percentage: 62 }
+  ];
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Welcome back, {user?.first_name || 'User'}!
-          </h1>
-          <p className="text-gray-600">
-            Here's your Savyre assessment overview and performance metrics
-          </p>
-        </div>
-
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {stats.map((stat) => (
-            <div key={stat.name} className="card">
-              <div className="flex items-center">
-                <div className={`p-3 rounded-lg ${stat.bgColor}`}>
-                  <stat.icon className={`h-6 w-6 ${stat.color}`} />
-                </div>
-                <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">{stat.name}</p>
-                  <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
-                </div>
+    <div className="min-h-screen bg-gray-50">
+      {/* Header */}
+      <header className="bg-white shadow-sm border-b">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center py-4">
+            <div className="flex items-center space-x-8">
+              <div className="text-2xl font-bold text-primary-600">Savyre</div>
+              <nav className="hidden md:flex space-x-6">
+                <Link to="/assessments" className="text-gray-700 hover:text-primary-600 font-medium">
+                  Assessments
+                </Link>
+                <Link to="/candidates" className="text-gray-700 hover:text-primary-600 font-medium">
+                  Candidates
+                </Link>
+              </nav>
+            </div>
+            <div className="flex items-center space-x-4">
+              <button className="bg-yellow-500 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 hover:bg-yellow-600">
+                <TrophyIcon className="h-4 w-4" />
+                <span>Go Pro</span>
+              </button>
+              <button className="p-2 text-gray-400 hover:text-gray-600">
+                <BellIcon className="h-5 w-5" />
+              </button>
+              <button className="p-2 text-gray-400 hover:text-gray-600">
+                <QuestionMarkCircleIcon className="h-5 w-5" />
+              </button>
+              <div className="w-8 h-8 bg-primary-600 rounded-full flex items-center justify-center text-white font-medium">
+                S
               </div>
             </div>
-          ))}
-        </div>
-
-        {/* Search and Actions */}
-        <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
-          <div className="relative w-full sm:w-96 mb-4 sm:mb-0">
-            <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Search assessments..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-            />
           </div>
-          <button className="btn-primary flex items-center">
-            <PlusIcon className="h-5 w-5 mr-2" />
-            New Assessment
-          </button>
+        </div>
+      </header>
+
+      {/* Dashboard Content */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Page Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome to Savyre</h1>
+          <p className="text-gray-600">Monitor your assessment portal performance and candidate activity</p>
         </div>
 
-        {/* Assessments Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredAssessments.map((assessment) => (
-            <div key={assessment.id} className="card hover:shadow-xl transition-shadow duration-300">
-              <div className="flex justify-between items-start mb-4">
-                <h3 className="text-lg font-semibold text-gray-900">{assessment.title}</h3>
-                <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                  assessment.difficulty === 'Advanced' ? 'bg-red-100 text-red-800' :
-                  assessment.difficulty === 'Intermediate' ? 'bg-yellow-100 text-yellow-800' :
-                  'bg-green-100 text-green-800'
-                }`}>
-                  {assessment.difficulty}
-                </span>
+        {/* Time Filter */}
+        <div className="mb-6">
+          <select 
+            value={timeFilter} 
+            onChange={(e) => setTimeFilter(e.target.value)}
+            className="border border-gray-300 rounded-lg px-4 py-2 bg-white focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+          >
+            <option value="7">Last 7 days</option>
+            <option value="30">Last 30 days</option>
+            <option value="90">Last 90 days</option>
+            <option value="365">Last year</option>
+          </select>
+        </div>
+
+        {/* Key Metrics Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-2 bg-blue-100 rounded-lg">
+                <DocumentTextIcon className="h-6 w-6 text-blue-600" />
               </div>
-              
-              <p className="text-gray-600 mb-4 line-clamp-2">
-                {assessment.description}
-              </p>
-              
-              <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
-                <span className="flex items-center">
-                  <ClockIcon className="h-4 w-4 mr-1" />
-                  {assessment.duration_minutes} min
-                </span>
-                <span>Created {new Date(assessment.created_at).toLocaleDateString()}</span>
-              </div>
-              
-              <div className="flex space-x-2">
-                <button className="flex-1 btn-primary text-sm py-2">
-                  Start Assessment
-                </button>
-                <button className="px-3 py-2 text-gray-600 hover:text-gray-900 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors duration-200">
-                  View Details
-                </button>
-              </div>
+              <div className="text-sm text-gray-500">Assessment candidates</div>
             </div>
-          ))}
+            <div className="text-3xl font-bold text-gray-900 mb-2">{metrics.assessmentCandidates}</div>
+            <div className="flex items-center text-sm text-green-600">
+              <ArrowUpIcon className="h-4 w-4 mr-1" />
+              +12% from last month
+            </div>
+          </div>
+
+          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-2 bg-purple-100 rounded-lg">
+                <VideoCameraIcon className="h-6 w-6 text-purple-600" />
+              </div>
+              <div className="text-sm text-gray-500">Video interview candidates</div>
+            </div>
+            <div className="text-3xl font-bold text-gray-900 mb-2">{metrics.videoCandidates}</div>
+            <div className="flex items-center text-sm text-green-600">
+              <ArrowUpIcon className="h-4 w-4 mr-1" />
+              +8% from last month
+            </div>
+          </div>
+
+          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+            <div className="flex items-center justify-between mb-4">
+              <div className="p-2 bg-green-100 rounded-lg">
+                <ChatBubbleLeftRightIcon className="h-6 w-6 text-green-600" />
+              </div>
+              <div className="text-sm text-gray-500">Chatbot candidates</div>
+            </div>
+            <div className="text-3xl font-bold text-gray-900 mb-2">{metrics.chatbotCandidates}</div>
+            <div className="flex items-center text-sm text-red-600">
+              <ArrowDownIcon className="h-4 w-4 mr-1" />
+              -3% from last month
+            </div>
+          </div>
         </div>
 
-        {filteredAssessments.length === 0 && (
-          <div className="text-center py-12">
-            <ChartBarIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No assessments found</h3>
-            <p className="text-gray-600">
-              {searchTerm ? 'Try adjusting your search terms' : 'Get started by creating your first assessment'}
-            </p>
+        {/* Charts Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          {/* Candidates per Day Chart */}
+          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Candidates per Day</h3>
+            <div className="h-64 flex items-end justify-between space-x-2">
+              {chartData.map((item, index) => (
+                <div key={index} className="flex flex-col items-center">
+                  <div 
+                    className="bg-primary-600 rounded-t-lg w-8 transition-all duration-300 hover:bg-primary-700"
+                    style={{ height: `${(item.candidates / 8) * 100}%` }}
+                  ></div>
+                  <div className="text-xs text-gray-500 mt-2">{item.day}</div>
+                  <div className="text-xs font-medium text-gray-900">{item.candidates}</div>
+                </div>
+              ))}
+            </div>
           </div>
-        )}
+
+          {/* Candidate Engagement Funnel */}
+          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Candidate Engagement Funnel</h3>
+            <div className="space-y-4">
+              {funnelData.map((stage, index) => (
+                <div key={index} className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-4 h-4 bg-primary-600 rounded-full"></div>
+                    <span className="text-sm font-medium text-gray-700">{stage.stage}</span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <span className="text-sm font-bold text-gray-900">{stage.count}</span>
+                    <span className="text-xs text-gray-500">({stage.percentage}%)</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Additional Metrics */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200 text-center">
+            <div className="text-3xl font-bold text-primary-600 mb-2">{metrics.totalAssessments}</div>
+            <div className="text-sm text-gray-600">Total Assessments Created</div>
+          </div>
+          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200 text-center">
+            <div className="text-3xl font-bold text-green-600 mb-2">{metrics.completionRate}%</div>
+            <div className="text-sm text-gray-600">Completion Rate</div>
+          </div>
+          <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200 text-center">
+            <div className="text-3xl font-bold text-purple-600 mb-2">{metrics.averageScore}%</div>
+            <div className="text-sm text-gray-600">Average Score</div>
+          </div>
+        </div>
+
+        {/* Quick Actions */}
+        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200 mb-8">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Link
+              to="/assessments/create"
+              className="flex items-center p-4 border border-gray-200 rounded-lg hover:border-primary-300 hover:bg-primary-50 transition-colors"
+            >
+              <DocumentTextIcon className="h-8 w-8 text-primary-600 mr-3" />
+              <div>
+                <h4 className="font-medium text-gray-900">Create Assessment</h4>
+                <p className="text-sm text-gray-500">Build a new assessment</p>
+              </div>
+            </Link>
+            
+            <Link
+              to="/questions"
+              className="flex items-center p-4 border border-gray-200 rounded-lg hover:border-primary-300 hover:bg-primary-50 transition-colors"
+            >
+              <AcademicCapIcon className="h-8 w-8 text-primary-600 mr-3" />
+              <div>
+                <h4 className="font-medium text-gray-900">Browse Questions</h4>
+                <p className="text-sm text-gray-500">Explore question library</p>
+              </div>
+            </Link>
+            
+            <Link
+              to="/assessments"
+              className="flex items-center p-4 border border-gray-200 rounded-lg hover:border-primary-300 hover:bg-primary-50 transition-colors"
+            >
+              <ChartBarIcon className="h-8 w-8 text-primary-600 mr-3" />
+              <div>
+                <h4 className="font-medium text-gray-900">View Analytics</h4>
+                <p className="text-sm text-gray-500">Check detailed reports</p>
+              </div>
+            </Link>
+          </div>
+        </div>
+
+        {/* Recent Activity */}
+        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-200">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
+          <div className="space-y-4">
+            <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              <span className="text-sm text-gray-600">New assessment "Frontend Developer Test" created</span>
+              <span className="text-xs text-gray-400 ml-auto">2 hours ago</span>
+            </div>
+            <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+              <span className="text-sm text-gray-600">Candidate John Doe completed "Python Basics" assessment</span>
+              <span className="text-xs text-gray-400 ml-auto">4 hours ago</span>
+            </div>
+            <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+              <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+              <span className="text-sm text-gray-600">New question added to "Database" category</span>
+              <span className="text-xs text-gray-400 ml-auto">6 hours ago</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
