@@ -196,6 +196,18 @@ const Login: React.FC = () => {
             >
               Try Demo Account
             </button>
+            
+            <button
+              type="button"
+              onClick={() => {
+                setUserType('candidate');
+                handleDemoLogin();
+              }}
+              disabled={isLoading}
+              className="w-full bg-primary-100 hover:bg-primary-200 text-primary-700 font-medium py-3 px-4 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Try Demo Candidate Account
+            </button>
           </div>
 
           <div className="text-center">

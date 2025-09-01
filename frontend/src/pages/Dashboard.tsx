@@ -110,19 +110,6 @@ const Dashboard: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary-100 text-primary-800 text-sm font-medium mb-4">
-            {user?.user_type === 'employer' ? (
-              <>
-                <BuildingOfficeIcon className="h-4 w-4 mr-2" />
-                Employer Dashboard
-              </>
-            ) : (
-              <>
-                <UserIcon className="h-4 w-4 mr-2" />
-                Candidate Dashboard
-              </>
-            )}
-          </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Welcome back, {user?.first_name || 'User'}!
           </h1>
@@ -133,6 +120,39 @@ const Dashboard: React.FC = () => {
             }
           </p>
         </div>
+
+        {/* Candidate Navigation */}
+        {user?.user_type === 'candidate' && (
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Access</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <a
+                href="/profile"
+                className="flex items-center p-4 border border-gray-200 rounded-lg hover:border-primary-300 hover:bg-primary-50 transition-all duration-200 group"
+              >
+                <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mr-4 group-hover:bg-primary-200 transition-colors duration-200">
+                  <UserIcon className="w-6 h-6 text-primary-600" />
+                </div>
+                <div>
+                  <h3 className="font-medium text-gray-900 group-hover:text-primary-700">My Profile</h3>
+                  <p className="text-sm text-gray-500">View and edit your profile information</p>
+                </div>
+              </a>
+              <a
+                href="/assessments"
+                className="flex items-center p-4 border border-gray-200 rounded-lg hover:border-primary-300 hover:bg-primary-50 transition-all duration-200 group"
+              >
+                <div className="w-12 h-12 bg-primary-100 rounded-lg flex items-center justify-center mr-4 group-hover:bg-primary-200 transition-colors duration-200">
+                  <ChartBarIcon className="w-6 h-6 text-primary-600" />
+                </div>
+                <div>
+                  <h3 className="font-medium text-gray-900 group-hover:text-primary-700">My Assessments</h3>
+                  <p className="text-sm text-gray-500">Track your assessment progress and results</p>
+                </div>
+              </a>
+            </div>
+          </div>
+        )}
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">

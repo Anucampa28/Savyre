@@ -1,202 +1,162 @@
-# Laksham Assessment Portal
+# TechCorp Frontend Enhancement Assessment 2024
 
-A modern, professional assessment portal website designed for real-life on-job simulated question library. Built with HTML5, CSS3, and vanilla JavaScript for optimal performance and accessibility.
+## Overview
+This repository contains the assessment materials for the TechCorp Frontend Enhancement challenge. You are given a React component that displays a simple user profile, and your task is to enhance this component by adding new features and improving the user experience.
 
-## 🚀 Features
+## Problem Statement
+You are given a React component (`UserProfile`) that displays basic user information. Your task is to enhance this component by implementing the requirements listed below.
 
-### Core Functionality
-- **Real-Life Scenarios**: Authentic workplace challenges that mirror actual job requirements
-- **Industry-Specific Assessments**: Tailored evaluations for different professional domains
-- **Interactive Assessment Tabs**: Dynamic content switching between Leadership, Technical, Soft Skills, and Industry-specific categories
-- **Responsive Design**: Mobile-first approach with seamless cross-device experience
-- **Modern UI/UX**: Clean, professional design with smooth animations and transitions
+## Assessment Requirements
 
-### Technical Features
-- **CSS Grid & Flexbox**: Modern layout techniques for responsive design
-- **CSS Custom Properties**: Consistent theming with CSS variables
-- **Intersection Observer API**: Performance-optimized animations and lazy loading
-- **Smooth Scrolling**: Enhanced navigation experience
-- **Form Validation**: Client-side validation with user-friendly notifications
-- **Mobile Navigation**: Hamburger menu for mobile devices
+### ✅ Required Features:
+- [ ] **Edit Profile Button**: Add a button that opens a modal for editing user information
+- [ ] **Form Validation**: Implement proper form validation for the edit profile form
+- [ ] **Save Changes Functionality**: Add save functionality with loading states and success messages
+- [ ] **Mobile Responsiveness**: Improve the responsive design for mobile devices
+- [ ] **Error Handling**: Add proper error handling for failed operations
+- [ ] **Theme Toggle**: Implement a dark/light theme toggle
 
-### Design Elements
-- **Gradient Backgrounds**: Modern visual appeal with CSS gradients
-- **Card-based Layout**: Clean, organized information presentation
-- **Hover Effects**: Interactive elements with smooth transitions
-- **Typography**: Professional font hierarchy using Inter font family
-- **Color Scheme**: Consistent color palette with primary, secondary, and accent colors
+### 🎯 Bonus Features (Optional):
+- [ ] **Image Upload**: Allow users to upload and change profile pictures
+- [ ] **Real-time Validation**: Show validation errors as user types
+- [ ] **Keyboard Navigation**: Ensure the component is fully accessible via keyboard
+- [ ] **Animation**: Add smooth transitions and animations
 
-## 🎯 Target Audience
-
-- **HR Professionals**: For employee skill assessment and development
-- **Corporate Trainers**: For workplace training and evaluation
-- **Educational Institutions**: For professional development programs
-- **Individual Professionals**: For self-assessment and skill validation
-- **Recruitment Agencies**: For candidate evaluation and screening
-
-## 🏗️ Project Structure
-
-```
-laksham-assessment-portal/
-├── index.html              # Main HTML file
-├── styles/
-│   └── main.css           # Main stylesheet with all CSS
-├── js/
-│   └── main.js            # JavaScript functionality
-└── README.md              # Project documentation
-```
-
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
-- Modern web browser (Chrome, Firefox, Safari, Edge)
-- Local web server (optional, for development)
+- Node.js (version 16 or higher)
+- npm or yarn package manager
 
 ### Installation
-1. Clone or download the project files
-2. Open `index.html` in your web browser
-3. For development, use a local server:
+1. Clone this repository:
    ```bash
-   # Using Python 3
-   python -m http.server 8000
-   
-   # Using Node.js (if you have http-server installed)
-   npx http-server
-   
-   # Using PHP
-   php -S localhost:8000
+   git clone https://github.com/Anucampa28/techcorp-frontend-enhancement-2024.git
+   cd techcorp-frontend-enhancement-2024
    ```
 
-### Development
-- Edit HTML content in `index.html`
-- Modify styles in `styles/main.css`
-- Update functionality in `js/main.js`
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-## 🎨 Customization
+3. Start the development server:
+   ```bash
+   npm start
+   ```
 
-### Colors
-The color scheme is defined using CSS custom properties in `:root`:
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-```css
-:root {
-    --primary-color: #6366f1;
-    --secondary-color: #10b981;
-    --accent-color: #f59e0b;
-    /* ... more colors */
-}
+## Current Component Structure
+
+The `UserProfile` component is located in `src/components/UserProfile.jsx` and currently displays:
+- User role
+- Bio description
+- Email address
+- Location
+
+## Assessment Guidelines
+
+### Time Limit
+- **Total Time**: 60 minutes
+- **Planning**: 10 minutes (read requirements, plan approach)
+- **Implementation**: 45 minutes (code the features)
+- **Testing**: 5 minutes (verify functionality)
+
+### Code Quality Expectations
+- **Clean Code**: Write readable, well-structured code
+- **Component Design**: Use proper React patterns and hooks
+- **Styling**: Implement responsive design with CSS
+- **Error Handling**: Graceful error handling and user feedback
+- **Accessibility**: Ensure the component is accessible
+
+### Submission Requirements
+1. **Working Application**: All required features must be functional
+2. **Code Quality**: Clean, well-commented code
+3. **Responsive Design**: Works on desktop and mobile
+4. **Error Handling**: Proper error states and user feedback
+5. **Documentation**: Clear comments explaining your approach
+
+## Evaluation Criteria
+
+| Criteria | Weight | Description |
+|----------|--------|-------------|
+| **Functionality** | 40% | All required features working correctly |
+| **Code Quality** | 25% | Clean, readable, well-structured code |
+| **User Experience** | 20% | Intuitive interface and smooth interactions |
+| **Responsive Design** | 10% | Works well on different screen sizes |
+| **Error Handling** | 5% | Graceful error states and user feedback |
+
+## Getting Help
+
+### Allowed Resources
+- ✅ React documentation and tutorials
+- ✅ CSS/HTML references
+- ✅ Stack Overflow and similar Q&A sites
+- ✅ Your own code snippets and libraries
+- ✅ Browser developer tools
+
+### Not Allowed
+- ❌ Copying complete solutions from others
+- ❌ Using AI tools to generate the entire solution
+- ❌ Getting help from other people during the assessment
+
+## Technical Notes
+
+### Dependencies Available
+- React 18.2.0
+- React DOM 18.2.0
+- React Scripts 5.0.1
+
+### File Structure
+```
+src/
+├── components/
+│   └── UserProfile.jsx    # Component to enhance
+├── App.js                 # Main application
+├── App.css                # Application styles
+└── index.js               # Entry point
 ```
 
-### Typography
-The project uses the Inter font family for a modern, professional look. You can change this by updating the font-family property in the CSS.
+### Styling
+- Use CSS classes or styled-components
+- Ensure responsive design (mobile-first approach)
+- Follow modern design principles
 
-### Layout
-The layout is built using CSS Grid and Flexbox, making it easy to modify sections and components.
+## Submission
 
-## 📱 Responsive Design
+### What to Submit
+1. **Working Code**: All files in your repository
+2. **README Updates**: Document any additional setup steps
+3. **Screenshots**: Show the enhanced component in action
 
-The website is fully responsive with breakpoints at:
-- **Desktop**: 1200px and above
-- **Tablet**: 768px - 1199px
-- **Mobile**: Below 768px
+### How to Submit
+1. Commit all your changes to the repository
+2. Push to the main branch
+3. Ensure the application runs without errors
+4. Document any additional features you implemented
 
-### Mobile Features
-- Hamburger navigation menu
-- Stacked layouts for better mobile viewing
-- Touch-friendly button sizes
-- Optimized typography for small screens
+## Contact
 
-## 🔧 Browser Support
+For questions about this assessment:
+- **Email**: assessment@techcorp.com
+- **Support**: Available during assessment hours
+- **Technical Issues**: Check the troubleshooting section below
 
-- **Chrome**: 60+
-- **Firefox**: 55+
-- **Safari**: 12+
-- **Edge**: 79+
+## Troubleshooting
 
-## 📊 Performance Features
+### Common Issues
+- **Port 3000 in use**: Try `npm start -- --port 3001`
+- **Dependencies not installing**: Clear npm cache with `npm cache clean --force`
+- **Build errors**: Check console for specific error messages
 
-- **Lazy Loading**: Images and content load as needed
-- **Optimized Animations**: Smooth 60fps animations using CSS transforms
-- **Debounced Events**: Performance-optimized scroll and resize handlers
-- **Minimal Dependencies**: No external libraries, pure vanilla implementation
-
-## 🎭 Interactive Elements
-
-### Assessment Tabs
-- Dynamic content switching
-- Smooth transitions between categories
-- Active state management
-
-### Contact Form
-- Real-time validation
-- User-friendly notifications
-- Responsive form layout
-
-### Navigation
-- Smooth scrolling to sections
-- Active link highlighting
-- Mobile-responsive menu
-
-## 🚀 Deployment
-
-### Static Hosting
-The project can be deployed to any static hosting service:
-- **Netlify**: Drag and drop deployment
-- **Vercel**: Git-based deployment
-- **GitHub Pages**: Free hosting for GitHub repositories
-- **AWS S3**: Scalable cloud hosting
-
-### Build Process
-No build process required - the project uses vanilla technologies that work directly in browsers.
-
-## 🔒 Security Considerations
-
-- Form validation is client-side only
-- No sensitive data collection
-- HTTPS recommended for production
-- Consider adding CSRF protection for forms if backend is added
-
-## 📈 Future Enhancements
-
-### Potential Additions
-- **Backend Integration**: Connect to assessment database
-- **User Authentication**: Login/signup system
-- **Progress Tracking**: User assessment history
-- **Analytics Dashboard**: Performance insights
-- **API Integration**: Third-party assessment tools
-- **Multi-language Support**: Internationalization
-
-### Technical Improvements
-- **Service Worker**: Offline functionality
-- **PWA Features**: Installable web app
-- **Performance Monitoring**: Core Web Vitals tracking
-- **Accessibility**: Enhanced screen reader support
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
-
-## 📞 Support
-
-For questions or support:
-- **Email**: hello@laksham.com
-- **Phone**: +1 (555) 123-4567
-- **Address**: 123 Innovation Drive, Tech City, TC 12345
-
-## 🙏 Acknowledgments
-
-- **Font Awesome**: For the comprehensive icon library
-- **Google Fonts**: For the Inter font family
-- **Modern CSS**: For advanced layout techniques
-- **Web Standards**: For progressive enhancement principles
+### Performance Tips
+- Use React.memo for expensive components
+- Implement proper loading states
+- Optimize re-renders with useCallback/useMemo
 
 ---
 
-**Built with ❤️ for professional skill development and assessment**
+**Good luck with your assessment! 🚀**
+
+Remember: Focus on implementing the core requirements first, then add bonus features if time permits.

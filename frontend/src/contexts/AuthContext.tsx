@@ -72,6 +72,25 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setError(null);
       setIsLoading(true);
       
+      // Handle demo login locally
+      if (email === 'demo@savyre.com' && password === 'demo123') {
+        const demoUser: User = {
+          id: 1,
+          email: 'demo@savyre.com',
+          first_name: 'Demo',
+          last_name: 'User',
+          is_verified: true,
+          user_type: userType
+        };
+        
+        localStorage.setItem('token', 'demo-token');
+        localStorage.setItem('userType', userType);
+        setUser(demoUser);
+        setIsLoading(false);
+        return;
+      }
+      
+      // Regular login flow (when backend is available)
       const response = await fetch('http://localhost:8001/api/auth/login', {
         method: 'POST',
         headers: {

@@ -40,54 +40,101 @@ const Navbar: React.FC = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-4">
-              <Link
-                to="/"
-                className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
-              >
-                Home
-              </Link>
-              
-              {isHomePage && (
+              {user ? (
+                // Logged-in user navigation (candidate/employer specific)
                 <>
-                  <button
-                    onClick={() => scrollToSection('features')}
+                  {user.user_type === 'candidate' && (
+                    <>
+                      <Link
+                        to="/candidate-home"
+                        className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                      >
+                        Home
+                      </Link>
+                      <Link
+                        to="/profile"
+                        className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                      >
+                        My Profile
+                      </Link>
+                      <Link
+                        to="/assessments"
+                        className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                      >
+                        My Assessments
+                      </Link>
+                    </>
+                  )}
+                  {user.user_type === 'employer' && (
+                    <>
+                      <Link
+                        to="/dashboard"
+                        className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                      >
+                        Dashboard
+                      </Link>
+                      <Link
+                        to="/assessments"
+                        className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                      >
+                        Manage Assessments
+                      </Link>
+                    </>
+                  )}
+                </>
+              ) : (
+                // Non-logged-in user navigation
+                <>
+                  <Link
+                    to="/"
                     className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
                   >
-                    Features
-                  </button>
-                  <button
-                    onClick={() => scrollToSection('assessments')}
+                    Home
+                  </Link>
+                  
+                  {isHomePage && (
+                    <>
+                      <button
+                        onClick={() => scrollToSection('features')}
+                        className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                      >
+                        Features
+                      </button>
+                      <button
+                        onClick={() => scrollToSection('assessments')}
+                        className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                      >
+                        Assessments
+                      </button>
+                      <button
+                        onClick={() => scrollToSection('industries')}
+                        className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                      >
+                        Industries
+                      </button>
+                      <button
+                        onClick={() => scrollToSection('pricing')}
+                        className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                      >
+                        Pricing
+                      </button>
+                      <button
+                        onClick={() => scrollToSection('contact')}
+                        className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
+                      >
+                        Contact
+                      </button>
+                    </>
+                  )}
+                  
+                  <Link
+                    to="/demo"
                     className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
                   >
-                    Assessments
-                  </button>
-                  <button
-                    onClick={() => scrollToSection('industries')}
-                    className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
-                  >
-                    Industries
-                  </button>
-                  <button
-                    onClick={() => scrollToSection('pricing')}
-                    className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
-                  >
-                    Pricing
-                  </button>
-                  <button
-                    onClick={() => scrollToSection('contact')}
-                    className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
-                  >
-                    Contact
-                  </button>
+                    Demo
+                  </Link>
                 </>
               )}
-              
-              <Link
-                to="/demo"
-                className="text-gray-700 hover:text-primary-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
-              >
-                Demo
-              </Link>
             </div>
           </div>
 
@@ -151,92 +198,166 @@ const Navbar: React.FC = () => {
       {isOpen && (
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t">
-            <Link
-              to="/"
-              className="text-gray-700 hover:text-primary-600 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
-              onClick={() => setIsOpen(false)}
-            >
-              Home
-            </Link>
-            
-            {isHomePage && (
-              <>
-                <button
-                  onClick={() => scrollToSection('features')}
-                  className="text-gray-700 hover:text-primary-600 block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
-                >
-                  Features
-                </button>
-                <button
-                  onClick={() => scrollToSection('assessments')}
-                  className="text-gray-700 hover:text-primary-600 block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
-                >
-                  Assessments
-                </button>
-                <button
-                  onClick={() => scrollToSection('industries')}
-                  className="text-gray-700 hover:text-primary-600 block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
-                >
-                  Industries
-                </button>
-                <button
-                  onClick={() => scrollToSection('pricing')}
-                  className="text-gray-700 hover:text-primary-600 block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
-                >
-                  Pricing
-                </button>
-                <button
-                  onClick={() => scrollToSection('contact')}
-                  className="text-gray-700 hover:text-primary-600 block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
-                >
-                  Contact
-                </button>
-              </>
-            )}
-            
-            <Link
-              to="/demo"
-              className="text-gray-700 hover:text-primary-600 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
-              onClick={() => setIsOpen(false)}
-            >
-              Demo
-            </Link>
-            
-            {user ? (
+                          {user ? (
+                // Logged-in user navigation (candidate/employer specific)
+                <>
+                  <Link
+                    to="/"
+                    className="text-gray-700 hover:text-primary-600 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Home
+                  </Link>
+                                   {user.user_type === 'candidate' && (
+                   <>
+                     <Link
+                       to="/candidate-home"
+                       className="text-gray-700 hover:text-primary-600 block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
+                       onClick={() => setIsOpen(false)}
+                     >
+                       Home
+                     </Link>
+                     <Link
+                       to="/profile"
+                       className="text-gray-700 hover:text-primary-600 block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
+                       onClick={() => setIsOpen(false)}
+                     >
+                       My Profile
+                     </Link>
+                     <Link
+                       to="/assessments"
+                       className="text-gray-700 hover:text-primary-600 block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
+                       onClick={() => setIsOpen(false)}
+                     >
+                       My Assessments
+                     </Link>
+                   </>
+                 )}
+                  {user.user_type === 'employer' && (
+                    <>
+                      <Link
+                        to="/dashboard"
+                        className="text-gray-700 hover:text-primary-600 block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        Dashboard
+                      </Link>
+                      <Link
+                        to="/assessments"
+                        className="text-gray-700 hover:text-primary-600 block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        Manage Assessments
+                      </Link>
+                    </>
+                  )}
+                  <Link
+                    to="/dashboard"
+                    className="btn-secondary block text-center mx-3 my-2"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Dashboard
+                  </Link>
+                  <button
+                    onClick={() => {
+                      handleLogout();
+                      setIsOpen(false);
+                    }}
+                    className="text-gray-700 hover:text-primary-600 block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
               <>
                 <Link
-                  to="/dashboard"
-                  className="btn-secondary block text-center mx-3 my-2"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Dashboard
-                </Link>
-                <button
-                  onClick={() => {
-                    handleLogout();
-                    setIsOpen(false);
-                  }}
-                  className="text-gray-700 hover:text-primary-600 block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
-                >
-                  Logout
-                </button>
-              </>
-            ) : (
-              <>
-                <Link
-                  to="/login"
+                  to="/"
                   className="text-gray-700 hover:text-primary-600 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
                   onClick={() => setIsOpen(false)}
                 >
-                  Sign In
+                  Home
                 </Link>
+                
+                {isHomePage && (
+                  <>
+                    <button
+                      onClick={() => scrollToSection('features')}
+                      className="text-gray-700 hover:text-primary-600 block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
+                    >
+                      Features
+                    </button>
+                    <button
+                      onClick={() => scrollToSection('assessments')}
+                      className="text-gray-700 hover:text-primary-600 block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
+                    >
+                      Assessments
+                    </button>
+                    <button
+                      onClick={() => scrollToSection('industries')}
+                      className="text-gray-700 hover:text-primary-600 block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
+                    >
+                      Industries
+                    </button>
+                    <button
+                      onClick={() => scrollToSection('pricing')}
+                      className="text-gray-700 hover:text-primary-600 block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
+                    >
+                      Pricing
+                    </button>
+                    <button
+                      onClick={() => scrollToSection('contact')}
+                      className="text-gray-700 hover:text-primary-600 block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
+                    >
+                      Contact
+                    </button>
+                  </>
+                )}
+                
                 <Link
-                  to="/login"
-                  className="btn-primary block text-center mx-3 my-2"
+                  to="/demo"
+                  className="text-gray-700 hover:text-primary-600 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
                   onClick={() => setIsOpen(false)}
                 >
-                  Get Started
+                  Demo
                 </Link>
+                
+                {user ? (
+                  <>
+                    <Link
+                      to="/dashboard"
+                      className="btn-secondary block text-center mx-3 my-2"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Dashboard
+                    </Link>
+                    <button
+                      onClick={() => {
+                        handleLogout();
+                        setIsOpen(false);
+                      }}
+                      className="text-gray-700 hover:text-primary-600 block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
+                    >
+                      Logout
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      to="/login"
+                      className="text-gray-700 hover:text-primary-600 block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Sign In
+                    </Link>
+                    <Link
+                      to="/login"
+                      className="btn-primary block text-center mx-3 my-2"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Get Started
+                    </Link>
+                  </>
+                )}
               </>
             )}
           </div>
