@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { 
   PlusIcon, 
   TrashIcon, 
@@ -13,6 +13,7 @@ import { Question, AssessmentQuestion, AssessmentForm } from '../types';
 
 const AssessmentBuilder: React.FC = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [selectedQuestions, setSelectedQuestions] = useState<Question[]>([]);
   const [assessmentQuestions, setAssessmentQuestions] = useState<AssessmentQuestion[]>([]);
   const [formData, setFormData] = useState<AssessmentForm>({
@@ -32,6 +33,26 @@ const AssessmentBuilder: React.FC = () => {
   ];
 
   const difficultyLevels = ['Easy', 'Medium', 'Hard', 'Mixed'];
+
+  useEffect(() => {
+    // Read URL parameters and pre-fill form
+    const role = searchParams.get('role');
+    const level = searchParams.get('level');
+    
+    if (role) {
+      setFormData(prev => ({ ...prev, title: role }));
+    }
+    
+    if (level) {
+      // Map the level to difficulty level
+      const levelMapping: { [key: string]: string } = {
+        'Beginner': 'Easy',
+        'Intermediate': 'Medium',
+        'Expert': 'Hard'
+      };
+      setFormData(prev => ({ ...prev, difficulty_level: levelMapping[level] || 'Medium' }));
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     // Convert selected questions to assessment questions

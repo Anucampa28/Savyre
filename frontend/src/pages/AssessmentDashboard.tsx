@@ -12,6 +12,7 @@ import {
   DocumentDuplicateIcon,
   TrashIcon
 } from '@heroicons/react/24/outline';
+import CreateAssessmentModal from '../components/CreateAssessmentModal';
 import { Assessment, AssessmentAttempt } from '../types';
 
 const AssessmentDashboard: React.FC = () => {
@@ -24,6 +25,7 @@ const AssessmentDashboard: React.FC = () => {
     completedAttempts: 0,
     averageScore: 0
   });
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   useEffect(() => {
     fetchDashboardData();
@@ -139,13 +141,13 @@ const AssessmentDashboard: React.FC = () => {
             <p className="text-gray-600">Manage your assessments and track candidate performance</p>
           </div>
           
-          <Link
-            to="/assessments/create"
+          <button
+            onClick={() => setIsCreateModalOpen(true)}
             className="inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
           >
             <PlusIcon className="h-5 w-5 mr-2" />
             Create Assessment
-          </Link>
+          </button>
         </div>
       </div>
 
@@ -392,6 +394,12 @@ const AssessmentDashboard: React.FC = () => {
           </Link>
         </div>
       </div>
+
+      {/* Create Assessment Modal */}
+      <CreateAssessmentModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+      />
     </div>
   );
 };
