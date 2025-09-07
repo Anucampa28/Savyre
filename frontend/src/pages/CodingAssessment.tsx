@@ -8,6 +8,10 @@ import {
   ExclamationTriangleIcon,
   CheckCircleIcon
 } from '@heroicons/react/24/outline';
+import { useAssessment } from '../hooks/useAssessments';
+import LoadingSkeleton from '../components/LoadingSkeleton';
+import ErrorBoundary from '../components/ErrorBoundary';
+import NotFound from '../components/NotFound';
 
 interface CodingProblem {
   id: number;
@@ -27,8 +31,11 @@ const CodingAssessment: React.FC = () => {
   const [isStarting, setIsStarting] = useState(false);
   const [showProblem, setShowProblem] = useState(false);
 
-  // Mock coding problem data
-  const codingProblem: CodingProblem = {
+  // Fetch assessment data from API
+  const { assessment, loading, error, refetch } = useAssessment(parseInt(id || '0'));
+
+  // Fallback coding problem data (for when API data is not available)
+  const fallbackCodingProblem: CodingProblem = {
     id: 1,
     title: 'Frontend Code Enhancement',
     description: 'You are given a React component that displays a simple user profile. Your task is to enhance this component by adding new features and improving the user experience.',
@@ -71,6 +78,40 @@ export default UserProfile;`,
     codespaceUrl: 'https://github.com/codespaces/new?repo=Anucampa28/techcorp-frontend-enhancement-2024'
   };
 
+  // Use assessment data from API or fallback
+  const codingProblem: CodingProblem = assessment ? {
+    id: assessment.id,
+    title: assessment.title,
+    description: assessment.description,
+    requirements: [
+      'Complete the coding challenge according to the assessment requirements',
+      'Follow best practices and coding standards',
+      'Ensure your code is well-documented and tested',
+      'Submit your solution within the time limit'
+    ],
+    existingCode: `// Assessment Code Template
+// This is a template for your coding assessment
+// Please implement the required functionality according to the assessment description
+
+function AssessmentComponent() {
+  // Your implementation goes here
+  return (
+    <div>
+      <h1>Assessment Component</h1>
+      {/* Implement your solution */}
+    </div>
+  );
+}
+
+export default AssessmentComponent;`,
+    timeLimit: assessment.duration_minutes || 60,
+    difficulty: assessment.difficulty || 'Intermediate',
+    repoUrl: assessment.github_repo_url || 'https://github.com/example/assessment-repo',
+    codespaceUrl: assessment.github_repo_url ? 
+      `https://github.com/codespaces/new?repo=${assessment.github_repo_url.split('/').slice(-2).join('/')}` :
+      'https://github.com/codespaces/new'
+  } : fallbackCodingProblem;
+
   const handleStartAssessment = async () => {
     setIsStarting(true);
     
@@ -93,6 +134,28 @@ export default UserProfile;`,
   const handleViewRepository = () => {
     window.open(codingProblem.repoUrl, '_blank');
   };
+
+  // Handle loading state
+  if (loading) {
+    return <LoadingSkeleton />;
+  }
+
+  // Handle error state
+  if (error) {
+    return (
+      <ErrorBoundary 
+        error={error}
+        title="Unable to load assessment"
+        message="We're having trouble loading the assessment details. Please check your connection and try again."
+        onRetry={refetch}
+      />
+    );
+  }
+
+  // Handle not found state
+  if (!assessment && !loading) {
+    return <NotFound />;
+  }
 
   if (!showProblem) {
     return (

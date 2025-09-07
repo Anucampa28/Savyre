@@ -1,84 +1,65 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
-  AcademicCapIcon, 
-  UserGroupIcon, 
-  ChartBarIcon, 
-  ClockIcon,
+  AcademicCapIcon,
   CheckIcon,
   EnvelopeIcon,
   PhoneIcon,
   MapPinIcon
 } from '@heroicons/react/24/outline';
+import { usePage } from '../hooks/useContent';
+import LoadingSkeleton from '../components/LoadingSkeleton';
+import ErrorBoundary from '../components/ErrorBoundary';
+import NotFound from '../components/NotFound';
 
 const Home: React.FC = () => {
   const [activeTab, setActiveTab] = useState('leadership');
+  
+  // Fetch content from database
+  const { page, loading, error } = usePage('home');
 
+  // Handle loading state
+  if (loading) {
+    return <LoadingSkeleton />;
+  }
 
+  // Handle error state
+  if (error) {
+    return (
+      <ErrorBoundary 
+        error={error}
+        title="Unable to load content"
+        message="We're having trouble loading the page content. Please check your connection and try again."
+        onRetry={() => window.location.reload()}
+      />
+    );
+  }
 
+  // Handle not found state
+  if (!page) {
+    return <NotFound />;
+  }
 
-  const features = [
-    {
-      icon: AcademicCapIcon,
-      title: 'Real-Life Scenarios',
-      description: 'Authentic workplace challenges that mirror actual job requirements'
-    },
-    {
-      icon: UserGroupIcon,
-      title: 'Industry-Specific',
-      description: 'Tailored evaluations for different professional domains'
-    },
-    {
-      icon: ChartBarIcon,
-      title: 'Interactive Assessments',
-      description: 'Dynamic content switching between multiple skill categories'
-    },
-    {
-      icon: ClockIcon,
-      title: 'Performance Tracking',
-      description: 'Monitor progress and identify areas for improvement'
-    }
-  ];
+  // Get content from database
+  const getSectionContent = (sectionKey: string) => {
+    if (!page?.sections) return null;
+    return page.sections.find(section => section.section_key === sectionKey);
+  };
 
-  const assessmentTabs = [
-    { id: 'leadership', title: 'Leadership', description: 'Develop essential leadership skills through real-world scenarios' },
-    { id: 'technical', title: 'Technical', description: 'Master technical competencies with hands-on problem solving' },
-    { id: 'soft-skills', title: 'Soft Skills', description: 'Enhance communication, teamwork, and emotional intelligence' },
-    { id: 'industry', title: 'Industry', description: 'Industry-specific challenges tailored to your professional field' }
-  ];
+  const heroSection = getSectionContent('hero');
+  const featuresSection = getSectionContent('features');
+  const assessmentsSection = getSectionContent('assessments');
+  const industriesSection = getSectionContent('industries');
+  const pricingSection = getSectionContent('pricing');
+  const contactSection = getSectionContent('contact');
 
-  const industries = [
-    { name: 'Technology', icon: '💻', description: 'Software development, IT infrastructure, cybersecurity' },
-    { name: 'Healthcare', icon: '🏥', description: 'Patient care, medical procedures, healthcare management' },
-    { name: 'Finance', icon: '💰', description: 'Banking, investment, risk management, compliance' },
-    { name: 'Education', icon: '🎓', description: 'Teaching, curriculum development, student assessment' },
-    { name: 'Manufacturing', icon: '🏭', description: 'Production, quality control, supply chain management' },
-    { name: 'Retail', icon: '🛍️', description: 'Customer service, sales, inventory management' }
-  ];
-
-  const pricingPlans = [
-    {
-      name: 'Starter',
-      price: '$29',
-      period: '/month',
-      features: ['5 assessments per month', 'Basic reporting', 'Email support', 'Standard scenarios'],
-      popular: false
-    },
-    {
-      name: 'Professional',
-      price: '$79',
-      period: '/month',
-      features: ['Unlimited assessments', 'Advanced analytics', 'Priority support', 'Custom scenarios', 'Team collaboration'],
-      popular: true
-    },
-    {
-      name: 'Enterprise',
-      price: 'Custom',
-      period: '',
-      features: ['Everything in Professional', 'Custom integrations', 'Dedicated support', 'White-label options', 'API access'],
-      popular: false
-    }
-  ];
+  // Extract data from sections (database content only)
+  const features = featuresSection?.meta_data?.features || [];
+  const assessmentTabs = assessmentsSection?.meta_data?.categories || [];
+  const industries = industriesSection?.meta_data?.industries || [];
+  const pricingPlans = pricingSection?.meta_data?.plans || [];
+  const heroStats = heroSection?.meta_data?.stats || [];
+  const contactInfo = contactSection?.meta_data?.contact_info || {};
 
   return (
     <div className="min-h-screen">
@@ -86,44 +67,38 @@ const Home: React.FC = () => {
       <section className="relative bg-gradient-to-br from-primary-600 to-secondary-600 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-6">
-            Master Real-World Skills with
-            <span className="block text-accent-400">On-Job Simulations</span>
+            {heroSection?.title || 'Welcome to Savyre'}
+            <span className="block text-accent-400">Assessment Portal</span>
           </h1>
           <p className="text-xl md:text-2xl mb-8 text-primary-100 max-w-3xl mx-auto">
-            Savyre's comprehensive assessment portal features real-life workplace scenarios, 
-            industry-specific challenges, and practical problem-solving exercises that mirror 
-            actual job requirements.
+            {heroSection?.content || 'Your comprehensive assessment platform for real-world skills evaluation.'}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
             <Link
               to="/login"
               className="btn-secondary text-lg px-8 py-3"
             >
-              Start Free Assessment
+              {heroSection?.meta_data?.cta_primary || 'Get Started'}
             </Link>
             <Link
-              to="/demo"
+              to="/assessment"
               className="bg-white text-primary-600 hover:bg-gray-50 font-medium px-8 py-3 rounded-lg transition-colors duration-200 text-lg"
             >
-              Watch Demo
+              {heroSection?.meta_data?.cta_secondary || 'Learn More'}
             </Link>
           </div>
           
           {/* Hero Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-2xl mx-auto">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-accent-400">50K+</div>
-              <div className="text-primary-100">Professionals Assessed</div>
+          {heroStats.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-2xl mx-auto">
+              {heroStats.map((stat: any, index: number) => (
+                <div key={index} className="text-center">
+                  <div className="text-3xl font-bold text-accent-400">{stat.value}</div>
+                  <div className="text-primary-100">{stat.label}</div>
+                </div>
+              ))}
             </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-accent-400">200+</div>
-              <div className="text-primary-100">Real Scenarios</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-accent-400">95%</div>
-              <div className="text-primary-100">Success Rate</div>
-            </div>
-          </div>
+          )}
         </div>
       </section>
 
@@ -132,29 +107,37 @@ const Home: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Why Choose Savyre?
+              {featuresSection?.title || 'Features'}
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Our platform combines cutting-edge technology with real-world scenarios 
-              to provide the most effective assessment experience.
+              {featuresSection?.content || 'Discover what makes our platform unique.'}
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature, index) => (
-              <div key={index} className="card text-center group hover:shadow-xl transition-shadow duration-300">
-                <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary-200 transition-colors duration-200">
-                  <feature.icon className="w-8 h-8 text-primary-600" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  {feature.title}
-                </h3>
-                <p className="text-gray-600">
-                  {feature.description}
-                </p>
-              </div>
-            ))}
-          </div>
+          {features.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {features.map((feature: any, index: number) => {
+                const IconComponent = AcademicCapIcon; // Default icon
+                return (
+                  <div key={index} className="card text-center group hover:shadow-xl transition-shadow duration-300">
+                    <div className="w-16 h-16 bg-primary-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary-200 transition-colors duration-200">
+                      <IconComponent className="w-8 h-8 text-primary-600" />
+                    </div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                      {feature.title}
+                    </h3>
+                    <p className="text-gray-600">
+                      {feature.description}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-gray-500">No features available at the moment.</p>
+            </div>
+          )}
         </div>
       </section>
 
@@ -163,65 +146,69 @@ const Home: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Comprehensive Assessment Categories
+              {assessmentsSection?.title || 'Assessment Categories'}
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Choose from our diverse range of assessment types designed to evaluate 
-              every aspect of professional competency.
+              {assessmentsSection?.content || 'Explore our assessment options.'}
             </p>
           </div>
 
-          {/* Assessment Tabs */}
-          <div className="bg-white rounded-xl shadow-lg p-6">
-            <div className="flex flex-wrap justify-center mb-8 border-b border-gray-200">
-              {assessmentTabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`px-6 py-3 text-sm font-medium rounded-t-lg transition-colors duration-200 ${
-                    activeTab === tab.id
-                      ? 'text-primary-600 border-b-2 border-primary-600 bg-primary-50'
-                      : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
-                  }`}
-                >
-                  {tab.title}
-                </button>
-              ))}
-            </div>
+          {assessmentTabs.length > 0 ? (
+            <div className="bg-white rounded-xl shadow-lg p-6">
+              <div className="flex flex-wrap justify-center mb-8 border-b border-gray-200">
+                {assessmentTabs.map((tab: any) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`px-6 py-3 text-sm font-medium rounded-t-lg transition-colors duration-200 ${
+                      activeTab === tab.id
+                        ? 'text-primary-600 border-b-2 border-primary-600 bg-primary-50'
+                        : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    {tab.title}
+                  </button>
+                ))}
+              </div>
 
-            <div className="text-center py-12">
-              {assessmentTabs.map((tab) => (
-                <div
-                  key={tab.id}
-                  className={activeTab === tab.id ? 'block' : 'hidden'}
-                >
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                    {tab.title} Assessments
-                  </h3>
-                  <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
-                    {tab.description}
-                  </p>
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <Link
-                      to="/demo"
-                      className="btn-secondary text-lg px-8 py-3"
-                    >
-                      Try {tab.title} Assessment
-                    </Link>
-                    <Link
-                      to="/assessment"
-                      className="btn-primary text-lg px-8 py-3 flex items-center justify-center gap-2 hover:bg-primary-700 transition-all duration-200"
-                    >
-                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                      </svg>
-                      Start Assessment
-                    </Link>
+              <div className="text-center py-12">
+                {assessmentTabs.map((tab: any) => (
+                  <div
+                    key={tab.id}
+                    className={activeTab === tab.id ? 'block' : 'hidden'}
+                  >
+                    <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                      {tab.title} Assessments
+                    </h3>
+                    <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+                      {tab.description}
+                    </p>
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                      <Link
+                        to="/assessment"
+                        className="btn-secondary text-lg px-8 py-3"
+                      >
+                        Try {tab.title} Assessment
+                      </Link>
+                      <Link
+                        to="/assessment"
+                        className="btn-primary text-lg px-8 py-3 flex items-center justify-center gap-2 hover:bg-primary-700 transition-all duration-200"
+                      >
+                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                        </svg>
+                        Start Assessment
+                      </Link>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-gray-500">No assessment categories available at the moment.</p>
+            </div>
+          )}
         </div>
       </section>
 
@@ -230,27 +217,32 @@ const Home: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Industry-Specific Solutions
+              {industriesSection?.title || 'Industry-Specific Solutions'}
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Tailored assessments for professionals across diverse industries, 
-              ensuring relevance to your specific workplace challenges.
+              {industriesSection?.content || 'Tailored assessments for professionals across diverse industries, ensuring relevance to your specific workplace challenges.'}
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {industries.map((industry, index) => (
-              <div key={index} className="card text-center hover:shadow-xl transition-shadow duration-300">
-                <div className="text-4xl mb-4">{industry.icon}</div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  {industry.name}
-                </h3>
-                <p className="text-gray-600">
-                  {industry.description}
-                </p>
-              </div>
-            ))}
-          </div>
+          {industries.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {industries.map((industry: any, index: number) => (
+                <div key={index} className="card text-center hover:shadow-xl transition-shadow duration-300">
+                  <div className="text-4xl mb-4">{industry.icon}</div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    {industry.name}
+                  </h3>
+                  <p className="text-gray-600">
+                    {industry.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-gray-500">No industries available at the moment.</p>
+            </div>
+          )}
         </div>
       </section>
 
@@ -259,49 +251,54 @@ const Home: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Choose Your Plan
+              {pricingSection?.title || 'Choose Your Plan'}
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Flexible pricing options designed to grow with your assessment needs, 
-              from individual professionals to enterprise teams.
+              {pricingSection?.content || 'Flexible pricing options designed to grow with your assessment needs, from individual professionals to enterprise teams.'}
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {pricingPlans.map((plan, index) => (
-              <div key={index} className={`card relative ${plan.popular ? 'ring-2 ring-primary-500' : ''}`}>
-                {plan.popular && (
-                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                    <span className="bg-primary-500 text-white px-4 py-1 rounded-full text-sm font-medium">
-                      Most Popular
-                    </span>
+          {pricingPlans.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {pricingPlans.map((plan: any, index: number) => (
+                <div key={index} className={`card relative ${plan.popular ? 'ring-2 ring-primary-500' : ''}`}>
+                  {plan.popular && (
+                    <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                      <span className="bg-primary-500 text-white px-4 py-1 rounded-full text-sm font-medium">
+                        Most Popular
+                      </span>
+                    </div>
+                  )}
+                  <div className="text-center mb-6">
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
+                    <div className="text-4xl font-bold text-primary-600">
+                      {plan.price}
+                      <span className="text-lg text-gray-500">{plan.period}</span>
+                    </div>
                   </div>
-                )}
-                <div className="text-center mb-6">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
-                  <div className="text-4xl font-bold text-primary-600">
-                    {plan.price}
-                    <span className="text-lg text-gray-500">{plan.period}</span>
-                  </div>
+                  <ul className="space-y-3 mb-8">
+                    {plan.features.map((feature: string, featureIndex: number) => (
+                      <li key={featureIndex} className="flex items-center">
+                        <CheckIcon className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
+                        <span className="text-gray-600">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <button className={`w-full py-3 px-6 rounded-lg font-medium transition-colors duration-200 ${
+                    plan.popular 
+                      ? 'btn-primary' 
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}>
+                    {plan.name === 'Enterprise' ? 'Contact Sales' : 'Get Started'}
+                  </button>
                 </div>
-                <ul className="space-y-3 mb-8">
-                  {plan.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-center">
-                      <CheckIcon className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
-                      <span className="text-gray-600">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-                <button className={`w-full py-3 px-6 rounded-lg font-medium transition-colors duration-200 ${
-                  plan.popular 
-                    ? 'btn-primary' 
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}>
-                  {plan.name === 'Enterprise' ? 'Contact Sales' : 'Get Started'}
-                </button>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-gray-500">No pricing plans available at the moment.</p>
+            </div>
+          )}
         </div>
       </section>
 
@@ -310,11 +307,10 @@ const Home: React.FC = () => {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Get in Touch
+              {contactSection?.title || 'Get in Touch'}
             </h2>
             <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Ready to transform your assessment experience? Contact our team 
-              to learn more about how Savyre can help your organization.
+              {contactSection?.content || 'Ready to transform your assessment experience? Contact our team to learn more about how Savyre can help your organization.'}
             </p>
           </div>
           
@@ -383,27 +379,38 @@ const Home: React.FC = () => {
             
             {/* Contact Info */}
             <div className="space-y-6">
-              <div className="flex items-start">
-                <EnvelopeIcon className="w-6 h-6 text-primary-600 mr-3 mt-1" />
-                <div>
-                  <h3 className="font-semibold text-gray-900">Email</h3>
-                  <p className="text-gray-600">hello@savyre.com</p>
+              {contactInfo.email && (
+                <div className="flex items-start">
+                  <EnvelopeIcon className="w-6 h-6 text-primary-600 mr-3 mt-1" />
+                  <div>
+                    <h3 className="font-semibold text-gray-900">Email</h3>
+                    <p className="text-gray-600">{contactInfo.email}</p>
+                  </div>
                 </div>
-              </div>
-              <div className="flex items-start">
-                <PhoneIcon className="w-6 h-6 text-primary-600 mr-3 mt-1" />
-                <div>
-                  <h3 className="font-semibold text-gray-900">Phone</h3>
-                  <p className="text-gray-600">+1 (555) 123-4567</p>
+              )}
+              {contactInfo.phone && (
+                <div className="flex items-start">
+                  <PhoneIcon className="w-6 h-6 text-primary-600 mr-3 mt-1" />
+                  <div>
+                    <h3 className="font-semibold text-gray-900">Phone</h3>
+                    <p className="text-gray-600">{contactInfo.phone}</p>
+                  </div>
                 </div>
-              </div>
-              <div className="flex items-start">
-                <MapPinIcon className="w-6 h-6 text-primary-600 mr-3 mt-1" />
-                <div>
-                  <h3 className="font-semibold text-gray-900">Address</h3>
-                  <p className="text-gray-600">123 Innovation Drive<br />Tech City, TC 12345</p>
+              )}
+              {contactInfo.address && (
+                <div className="flex items-start">
+                  <MapPinIcon className="w-6 h-6 text-primary-600 mr-3 mt-1" />
+                  <div>
+                    <h3 className="font-semibold text-gray-900">Address</h3>
+                    <p className="text-gray-600" dangerouslySetInnerHTML={{ __html: contactInfo.address }} />
+                  </div>
                 </div>
-              </div>
+              )}
+              {!contactInfo.email && !contactInfo.phone && !contactInfo.address && (
+                <div className="text-center py-8">
+                  <p className="text-gray-500">Contact information not available.</p>
+                </div>
+              )}
             </div>
           </div>
         </div>

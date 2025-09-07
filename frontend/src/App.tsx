@@ -6,12 +6,12 @@ import ChatWidget from './components/ChatWidget';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
-import Demo from './pages/Demo';
 import AssessmentSelection from './pages/AssessmentSelection';
 import CandidateProfile from './pages/CandidateProfile';
 import CandidateAssessments from './pages/CandidateAssessments';
 import CandidateHome from './pages/CandidateHome';
 import CodingAssessment from './pages/CodingAssessment';
+import CodeReviewAssessment from './pages/CodeReviewAssessment';
 import { AuthProvider } from './contexts/AuthContext';
 
 function App() {
@@ -25,11 +25,11 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/demo" element={<Demo />} />
               <Route path="/assessment" element={<AssessmentSelection />} />
               <Route path="/profile" element={<CandidateProfile />} />
               <Route path="/assessments" element={<CandidateAssessments />} />
               <Route path="/coding-assessment/:id" element={<CodingAssessment />} />
+              <Route path="/code-review-assessment/:id" element={<CodeReviewAssessment />} />
               <Route path="/candidate-home" element={<CandidateHome />} />
             </Routes>
           </main>

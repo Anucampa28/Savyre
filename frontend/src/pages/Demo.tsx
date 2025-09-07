@@ -6,6 +6,10 @@ import {
   ArrowRightIcon,
   PlayIcon
 } from '@heroicons/react/24/outline';
+import { usePage } from '../hooks/useContent';
+import LoadingSkeleton from '../components/LoadingSkeleton';
+import ErrorBoundary from '../components/ErrorBoundary';
+import NotFound from '../components/NotFound';
 
 interface DemoAssessment {
   id: number;
@@ -18,41 +22,44 @@ interface DemoAssessment {
 
 const Demo: React.FC = () => {
   const [selectedAssessment, setSelectedAssessment] = useState<DemoAssessment | null>(null);
+  
+  // Fetch content from database
+  const { page, loading, error } = usePage('demo');
 
-  const demoAssessments: DemoAssessment[] = [
-    {
-      id: 1,
-      title: 'Leadership Challenge',
-      description: 'Navigate through real-world leadership scenarios and make critical decisions.',
-      duration: 20,
-      questions: 8,
-      category: 'Leadership'
-    },
-    {
-      id: 2,
-      title: 'Technical Problem Solving',
-      description: 'Solve complex technical problems with limited time and resources.',
-      duration: 15,
-      questions: 6,
-      category: 'Technical'
-    },
-    {
-      id: 3,
-      title: 'Communication Skills',
-      description: 'Practice effective communication in various workplace situations.',
-      duration: 12,
-      questions: 5,
-      category: 'Soft Skills'
-    },
-    {
-      id: 4,
-      title: 'Team Collaboration',
-      description: 'Work through team dynamics and collaboration challenges.',
-      duration: 18,
-      questions: 7,
-      category: 'Teamwork'
-    }
-  ];
+  // Handle loading state
+  if (loading) {
+    return <LoadingSkeleton />;
+  }
+
+  // Handle error state
+  if (error) {
+    return (
+      <ErrorBoundary 
+        error={error}
+        title="Unable to load demo content"
+        message="We're having trouble loading the demo page. Please check your connection and try again."
+        onRetry={() => window.location.reload()}
+      />
+    );
+  }
+
+  // Handle not found state
+  if (!page) {
+    return <NotFound />;
+  }
+
+  // Get content from database
+  const getSectionContent = (sectionKey: string) => {
+    if (!page?.sections) return null;
+    return page.sections.find(section => section.section_key === sectionKey);
+  };
+
+  const demoAssessmentsSection = getSectionContent('demo_assessments');
+  const ctaSection = getSectionContent('cta');
+
+  // Extract data from sections (database content only)
+  const demoAssessments: DemoAssessment[] = demoAssessmentsSection?.meta_data?.assessments || [];
+  const ctaData = ctaSection?.meta_data || {};
 
   const handleStartAssessment = (assessment: DemoAssessment) => {
     setSelectedAssessment(assessment);
@@ -68,11 +75,10 @@ const Demo: React.FC = () => {
       <section className="bg-white shadow-sm border-b border-gray-100 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Savyre Assessment Demo
+            {page.title || 'Savyre Assessment Demo'}
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Experience our real-world workplace scenarios and interactive assessments. 
-            Get a feel for how Savyre evaluates professional skills through practical challenges.
+            {page.description || 'Experience our real-world workplace scenarios and interactive assessments.'}
           </p>
         </div>
       </section>
@@ -80,8 +86,9 @@ const Demo: React.FC = () => {
       {/* Demo Assessments Grid */}
       <section className="py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
-            {demoAssessments.map((assessment) => (
+          {demoAssessments.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+              {demoAssessments.map((assessment) => (
               <div key={assessment.id} className="card hover:shadow-xl transition-all duration-300 group">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
@@ -126,7 +133,12 @@ const Demo: React.FC = () => {
                 </button>
               </div>
             ))}
-          </div>
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-gray-500">No demo assessments available at the moment.</p>
+            </div>
+          )}
         </div>
       </section>
 
@@ -134,23 +146,23 @@ const Demo: React.FC = () => {
       <section className="py-16 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-gray-900 mb-4">
-            Ready for the Full Experience?
+            {ctaSection?.title || 'Ready for the Full Experience?'}
           </h2>
           <p className="text-xl text-gray-600 mb-8">
-            Create your account to access our complete assessment library and track your progress over time.
+            {ctaSection?.content || 'Create your account to access our complete assessment library and track your progress over time.'}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               to="/login"
               className="btn-primary text-lg px-8 py-3"
             >
-              Create Account
+              {ctaData.cta_primary || 'Create Account'}
             </Link>
             <Link
               to="/"
               className="bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium px-8 py-3 rounded-lg transition-colors duration-200 text-lg"
             >
-              Learn More
+              {ctaData.cta_secondary || 'Learn More'}
             </Link>
           </div>
         </div>
