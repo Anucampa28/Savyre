@@ -1,111 +1,62 @@
-import React, { useState, useEffect } from 'react';
-import { useAuth } from '../contexts/AuthContext';
+import React, { useState } from 'react';
 import { 
   ClockIcon, 
   CheckCircleIcon, 
-  ExclamationTriangleIcon,
   PlayIcon,
   EyeIcon,
   ChartBarIcon,
   CalendarIcon
 } from '@heroicons/react/24/outline';
+import { useAssessments } from '../hooks/useAssessments';
+import LoadingSkeleton from '../components/LoadingSkeleton';
+import ErrorBoundary from '../components/ErrorBoundary';
+import { Assessment } from '../services/assessmentService';
 
-interface Assessment {
-  id: number;
-  title: string;
-  description: string;
-  difficulty: string;
-  duration_minutes: number;
-  status: 'completed' | 'in_progress' | 'upcoming' | 'expired';
+// Extended interface for candidate-specific assessment data
+interface CandidateAssessment extends Assessment {
+  status?: 'completed' | 'in_progress' | 'upcoming' | 'expired';
   score?: number;
   max_score?: number;
   completed_at?: string;
   started_at?: string;
   due_date?: string;
-  category: string;
-  employer: string;
-  roundType: string;
+  category?: string;
+  employer?: string;
+  roundType?: string;
 }
 
 const CandidateAssessments: React.FC = () => {
-  const { user } = useAuth();
-  const [assessments, setAssessments] = useState<Assessment[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<'all' | 'completed' | 'in_progress' | 'upcoming'>('all');
+  
+  // Fetch assessments from API
+  const { assessments: apiAssessments, loading, error, stats, refetch } = useAssessments();
 
-  // Mock data for demonstration
-  useEffect(() => {
-    const mockAssessments: Assessment[] = [
-      {
-        id: 1,
-        title: 'Frontend Code Enhancement',
-        description: 'Enhance a React component to add new features and improve user experience',
-        difficulty: 'Intermediate',
-        duration_minutes: 60,
-        status: 'upcoming',
-        due_date: '2024-02-01T23:59:59Z',
-        category: 'Technical Skills',
-        employer: 'TechCorp Inc.',
-        roundType: 'Coding Assessment'
-      },
-      {
-        id: 2,
-        title: 'Code Quality Review',
-        description: 'Review and improve existing code for better maintainability',
-        difficulty: 'Advanced',
-        duration_minutes: 60,
-        status: 'in_progress',
-        started_at: '2024-01-20T10:00:00Z',
-        due_date: '2024-01-25T23:59:59Z',
-        category: 'Technical Skills',
-        employer: 'Innovation Labs',
-        roundType: 'Code Review'
-      },
-      {
-        id: 3,
-        title: 'Problem Solving Challenge',
-        description: 'Tackle complex problems and demonstrate your analytical thinking',
-        difficulty: 'Intermediate',
-        duration_minutes: 90,
-        status: 'upcoming',
-        due_date: '2024-02-01T23:59:59Z',
-        category: 'Technical Skills',
-        employer: 'CodeAcademy',
-        roundType: 'Coding Assessment'
-      },
-      {
-        id: 4,
-        title: 'Architecture Discussion',
-        description: 'Discuss system design principles and architectural decisions',
-        difficulty: 'Advanced',
-        duration_minutes: 120,
-        status: 'upcoming',
-        due_date: '2024-02-05T23:59:59Z',
-        category: 'Technical Skills',
-        employer: 'BigTech Corp',
-        roundType: 'System Design'
-      },
-      {
-        id: 5,
-        title: 'Data Management Skills',
-        description: 'Showcase your understanding of data structures and optimization',
-        difficulty: 'Intermediate',
-        duration_minutes: 75,
-        status: 'completed',
-        score: 92,
-        max_score: 100,
-        completed_at: '2024-01-10T16:45:00Z',
-        category: 'Technical Skills',
-        employer: 'DataFlow Systems',
-        roundType: 'Code Review'
-      }
-    ];
-    
-    setTimeout(() => {
-      setAssessments(mockAssessments);
-      setIsLoading(false);
-    }, 1000);
-  }, []);
+  // Transform API assessments to include candidate-specific data
+  const assessments: CandidateAssessment[] = apiAssessments.map(assessment => ({
+    ...assessment,
+    status: 'upcoming' as const, // Default status since API doesn't provide this
+    category: 'Technical Skills',
+    employer: 'Savyre Platform',
+    roundType: assessment.assessment_type === 'code_review' ? 'Code Review' : 'Coding Assessment',
+    due_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString() // 7 days from now
+  }));
+
+  // Handle loading state
+  if (loading) {
+    return <LoadingSkeleton />;
+  }
+
+  // Handle error state
+  if (error) {
+    return (
+      <ErrorBoundary 
+        error={error}
+        title="Unable to load assessments"
+        message="We're having trouble loading your assessments. Please check your connection and try again."
+        onRetry={refetch}
+      />
+    );
+  }
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -122,20 +73,6 @@ const CandidateAssessments: React.FC = () => {
     }
   };
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'completed':
-        return <CheckCircleIcon className="w-5 h-5" />;
-      case 'in_progress':
-        return <ClockIcon className="w-5 h-5" />;
-      case 'upcoming':
-        return <CalendarIcon className="w-5 h-5" />;
-      case 'expired':
-        return <ExclamationTriangleIcon className="w-5 h-5" />;
-      default:
-        return <ClockIcon className="w-5 h-5" />;
-    }
-  };
 
 
 
@@ -144,7 +81,8 @@ const CandidateAssessments: React.FC = () => {
     return assessment.status === activeTab;
   });
 
-  const stats = [
+  // Calculate stats from transformed assessments
+  const displayStats = [
     {
       name: 'Total Assessments',
       value: assessments.length,
@@ -175,14 +113,6 @@ const CandidateAssessments: React.FC = () => {
     }
   ];
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary-600"></div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -198,7 +128,7 @@ const CandidateAssessments: React.FC = () => {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {stats.map((stat) => (
+          {displayStats.map((stat) => (
             <div key={stat.name} className="card">
               <div className="flex items-center">
                 <div className={`p-3 rounded-lg ${stat.bgColor}`}>
@@ -251,15 +181,15 @@ const CandidateAssessments: React.FC = () => {
                   <div className="mb-3">
                     <div className="flex items-center">
                       <span className="text-xl font-bold text-primary-600 mr-2">🏢</span>
-                      <span className="text-xl font-bold text-primary-600">{assessment.employer}</span>
+                      <span className="text-xl font-bold text-primary-600">{assessment.employer || 'Savyre Platform'}</span>
                     </div>
                   </div>
                   
                   {/* Assessment Title and Status */}
                   <div className="flex items-center space-x-4 mb-3">
                     <h3 className="text-lg font-semibold text-gray-900">{assessment.title}</h3>
-                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(assessment.status)}`}>
-                      {assessment.status.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(assessment.status || 'upcoming')}`}>
+                      {(assessment.status || 'upcoming').replace('_', ' ').replace(/\b\w/g, (l: string) => l.toUpperCase())}
                     </span>
                   </div>
                   
@@ -267,7 +197,7 @@ const CandidateAssessments: React.FC = () => {
                   <div className="mb-3">
                     <div className="flex items-center">
                       <span className="text-lg font-semibold text-secondary-600 mr-2">🎯</span>
-                      <span className="text-lg font-semibold text-secondary-600">{assessment.roundType}</span>
+                      <span className="text-lg font-semibold text-secondary-600">{assessment.roundType || 'Assessment'}</span>
                     </div>
                   </div>
                   
@@ -285,7 +215,7 @@ const CandidateAssessments: React.FC = () => {
                   {/* Round Type Badge Only */}
                   <div className="flex items-center space-x-2">
                     <span className="inline-block px-3 py-1 bg-secondary-100 text-secondary-700 text-sm rounded-full font-semibold border border-secondary-200">
-                      {assessment.roundType}
+                      {assessment.roundType || 'Assessment'}
                     </span>
                   </div>
                 </div>
@@ -301,7 +231,7 @@ const CandidateAssessments: React.FC = () => {
                     )}
                     {assessment.score !== undefined && (
                       <div className="mb-1">
-                        <span className="font-medium">Score:</span> {assessment.score}/{assessment.max_score}
+                        <span className="font-medium">Score:</span> {assessment.score}/{assessment.max_score || 100}
                       </div>
                     )}
                     {assessment.completed_at && (
@@ -313,9 +243,14 @@ const CandidateAssessments: React.FC = () => {
                   
                   {/* Actions */}
                   <div className="flex space-x-2">
-                    {assessment.status === 'upcoming' && (
+                    {(assessment.status === 'upcoming' || !assessment.status) && (
                       <button 
-                        onClick={() => window.location.href = `/coding-assessment/${assessment.id}`}
+                        onClick={() => {
+                          const url = assessment.assessment_type === 'code_review' 
+                            ? `/code-review-assessment/${assessment.id}`
+                            : `/coding-assessment/${assessment.id}`;
+                          window.location.href = url;
+                        }}
                         className="btn-primary text-sm py-2 px-4 flex items-center"
                       >
                         <PlayIcon className="w-4 h-4 mr-1" />
@@ -324,7 +259,12 @@ const CandidateAssessments: React.FC = () => {
                     )}
                     {assessment.status === 'in_progress' && (
                       <button 
-                        onClick={() => window.location.href = `/coding-assessment/${assessment.id}`}
+                        onClick={() => {
+                          const url = assessment.assessment_type === 'code_review' 
+                            ? `/code-review-assessment/${assessment.id}`
+                            : `/coding-assessment/${assessment.id}`;
+                          window.location.href = url;
+                        }}
                         className="btn-primary text-sm py-2 px-4 flex items-center"
                       >
                         <PlayIcon className="w-4 h-4 mr-1" />
@@ -351,12 +291,20 @@ const CandidateAssessments: React.FC = () => {
           <div className="text-center py-12">
             <ChartBarIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-gray-900 mb-2">No assessments found</h3>
-            <p className="text-gray-600">
+            <p className="text-gray-600 mb-4">
               {activeTab === 'all' 
                 ? 'You haven\'t taken any assessments yet'
                 : `No ${activeTab.replace('_', ' ')} assessments found`
               }
             </p>
+            {activeTab === 'all' && (
+              <button
+                onClick={() => window.location.href = '/assessment'}
+                className="btn-primary"
+              >
+                Take Your First Assessment
+              </button>
+            )}
           </div>
         )}
       </div>

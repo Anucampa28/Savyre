@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { 
   ChartBarIcon, 
@@ -10,98 +10,63 @@ import {
   BuildingOfficeIcon,
   UserIcon
 } from '@heroicons/react/24/outline';
-
-interface Assessment {
-  id: number;
-  title: string;
-  description: string;
-  difficulty: string;
-  duration_minutes: number;
-  created_at: string;
-}
+import { useAssessments, useAssessmentSearch } from '../hooks/useAssessments';
+import LoadingSkeleton from '../components/LoadingSkeleton';
+import ErrorBoundary from '../components/ErrorBoundary';
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
-  const [assessments, setAssessments] = useState<Assessment[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  
+  // Fetch assessments from API
+  const { assessments, loading, error, stats, refetch } = useAssessments();
+  const filteredAssessments = useAssessmentSearch(assessments, searchTerm);
 
-  // Mock data for demonstration
-  useEffect(() => {
-    const mockAssessments: Assessment[] = [
-      {
-        id: 1,
-        title: 'Leadership Assessment',
-        description: 'Evaluate your leadership skills and decision-making abilities',
-        difficulty: 'Advanced',
-        duration_minutes: 45,
-        created_at: '2024-01-15'
-      },
-      {
-        id: 2,
-        title: 'Technical Skills Review',
-        description: 'Test your technical knowledge and problem-solving skills',
-        difficulty: 'Intermediate',
-        duration_minutes: 30,
-        created_at: '2024-01-10'
-      },
-      {
-        id: 3,
-        title: 'Communication Skills',
-        description: 'Assess your verbal and written communication abilities',
-        difficulty: 'Beginner',
-        duration_minutes: 25,
-        created_at: '2024-01-05'
-      }
-    ];
-    
-    setTimeout(() => {
-      setAssessments(mockAssessments);
-      setIsLoading(false);
-    }, 1000);
-  }, []);
-
-  const filteredAssessments = assessments.filter(assessment =>
-    assessment.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    assessment.description.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const stats = [
+  const statsData = [
     {
       name: 'Total Assessments',
-      value: assessments.length,
+      value: stats.total,
       icon: ChartBarIcon,
       color: 'text-blue-600',
       bgColor: 'bg-blue-100'
     },
     {
       name: 'Completed',
-      value: 2,
+      value: stats.completed,
       icon: CheckCircleIcon,
       color: 'text-green-600',
       bgColor: 'bg-green-100'
     },
     {
       name: 'In Progress',
-      value: 1,
+      value: stats.in_progress,
       icon: ClockIcon,
       color: 'text-yellow-600',
       bgColor: 'bg-yellow-100'
     },
     {
       name: 'Pending',
-      value: 0,
+      value: stats.pending,
       icon: ExclamationTriangleIcon,
       color: 'text-red-600',
       bgColor: 'bg-red-100'
     }
   ];
 
-  if (isLoading) {
+  // Handle loading state
+  if (loading) {
+    return <LoadingSkeleton />;
+  }
+
+  // Handle error state
+  if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary-600"></div>
-      </div>
+      <ErrorBoundary 
+        error={error}
+        title="Unable to load dashboard"
+        message="We're having trouble loading your dashboard data. Please check your connection and try again."
+        onRetry={refetch}
+      />
     );
   }
 
@@ -156,7 +121,7 @@ const Dashboard: React.FC = () => {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {stats.map((stat) => (
+          {statsData.map((stat) => (
             <div key={stat.name} className="card">
               <div className="flex items-center">
                 <div className={`p-3 rounded-lg ${stat.bgColor}`}>
@@ -235,6 +200,14 @@ const Dashboard: React.FC = () => {
             <p className="text-gray-600">
               {searchTerm ? 'Try adjusting your search terms' : 'Get started by creating your first assessment'}
             </p>
+            {!searchTerm && (
+              <button 
+                onClick={refetch}
+                className="mt-4 btn-primary"
+              >
+                Refresh Assessments
+              </button>
+            )}
           </div>
         )}
       </div>
